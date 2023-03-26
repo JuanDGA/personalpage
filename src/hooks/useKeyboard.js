@@ -8,7 +8,10 @@ export const useKeyUp = () => {
     keycode.value = key.keyCode;
   };
 
-  useEventListener(window, "keyup", keyUp);
+  useEventListener(window, "keyup", (e) => {
+    e.preventDefault();
+    keyUp(e);
+  });
 
   return { keycode };
 };

@@ -76,6 +76,7 @@
     playing.value = false;
     foodIsMissing.value = true;
     snake.value = [];
+    growQueue.value = [];
     history.value.push(points.value);
     points.value = 0;
     setupGame();
@@ -85,46 +86,47 @@
     if (snake.value[0][0] === currentFood.value[0] && snake.value[0][1] === currentFood.value[1]) {
       points.value += 10;
       foodIsMissing.value = true;
-      growQueue.value.push({ pos: currentFood.value, dir: dir.value });
+      growQueue.value.push(currentFood.value);
     }
   };
 
   const checkGrowing = () => {
     if (growQueue.value.length === 0) return;
-    const last = snake.value[snake.value.length - 1];
-    if (last[0] !== growQueue.value[0].pos[0] || last[1] !== growQueue.value[0].pos[1]) return;
-    const info = growQueue.value.shift();
-    let pos = [0, 0];
-    if (info.dir === "UP") {
-      pos[0] = info.pos[0];
-      pos[1] = info.pos[1] + 1;
-    } else if (info.dir === "DOWN") {
-      pos[0] = info.pos[0];
-      pos[1] = info.pos[1] - 1;
-    } else if (info.dir === "LEFT") {
-      pos[0] = info.pos[0] + 1;
-      pos[1] = info.pos[1];
-    } else if (info.dir === "RIGHT") {
-      pos[0] = info.pos[0] - 1;
-      pos[1] = info.pos[1];
-    }
-    snake.value.push(pos);
+    const nextFood = growQueue.value[0];
+    const inSnake = snake.value.some(it => it[0] === nextFood[0] && it[1] === nextFood[1]);
+    if (inSnake) return;
+    snake.value.push(growQueue.value.shift());
   };
 
   const drawFood = () => {
     let x, y;
     getCtx().fillStyle = "green";
     if (foodIsMissing.value) {
-      x = Math.floor(Math.random() * 22);
-      y = Math.floor(Math.random() * 22);
-      currentFood.value = [x, y];
+      while (foodIsMissing.value) {
+        x = Math.floor(Math.random() * 22);
+        y = Math.floor(Math.random() * 22);
+        currentFood.value = [x, y];
+        foodIsMissing.value = snake.value.some(it => it[0] === x && it[1] === y);
+      }
     } else {
       x = currentFood.value[0];
       y = currentFood.value[1];
     }
     getCtx().fillRect(x * 15, y * 15, 15, 15);
-    foodIsMissing.value = false;
   };
+
+  const drawEaten = () => {
+    for (let i of growQueue.value) {
+      const pos = i;
+      const isHead = pos[0] === snake.value[0][0] && pos[1] === snake.value[0][1];
+      getCtx().fillStyle = isHead ? "#F3F17F" : "#28b463";
+      let x = pos[0] * 15;
+      let y = pos[1] * 15;
+      x -= 2;
+      y -= 2;
+      getCtx().fillRect(x, y, 19, 19);
+    }
+  }
 
   const drawSnake = () => {
     for (let j = 0; j < snake.value.length; j++) {
@@ -139,6 +141,7 @@
     getCtx().fillRect(0, 0, 330, 330);
     drawFood();
     drawSnake();
+    drawEaten();
   };
 
   const setupGame = () => {
