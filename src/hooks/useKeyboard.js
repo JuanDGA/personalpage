@@ -6,9 +6,9 @@ export const useKeyUp = () => {
 
   const keyUp = (key) => {
     keycode.value = key.keyCode;
-  }
+  };
 
   useEventListener(window, "keyup", keyUp);
 
-  return {keycode};
-}
+  return { keycode };
+};

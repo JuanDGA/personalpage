@@ -1,7 +1,7 @@
 <script setup>
-import profile from "@/assets/profile.jpg";
-import JgButton from "@/components/JgButton.vue";
-import JgAutoWriter from "@/components/JgAutoWriter.vue";
+  import profile from "@/assets/profile.jpg";
+  import JgButton from "@/components/JgButton.vue";
+  import JgAutoWriter from "@/components/JgAutoWriter.vue";
 </script>
 
 <template>
@@ -9,7 +9,7 @@ import JgAutoWriter from "@/components/JgAutoWriter.vue";
     <div class="first-look">
       <img class="profile" :src="profile" alt="Profile image of Juan David Guevara Arevalo" />
       <h1 class="name">Juan David Guevara Arevalo</h1>
-      <JgAutoWriter text="Computer and systems engineer"/>
+      <JgAutoWriter text="Computer and Systems Engineer." />
     </div>
     <nav>
       <jg-button to="/education">Education</jg-button>
@@ -23,29 +23,29 @@ import JgAutoWriter from "@/components/JgAutoWriter.vue";
 </template>
 
 <style scoped>
-.first-look {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
+  .first-look {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
 
-.profile {
-  border-radius: 100%;
-  max-width: 90vw;
-  width: 250px;
-  margin: 20px;
-}
+  .profile {
+    border-radius: 100%;
+    max-width: 90vw;
+    width: 250px;
+    margin: 20px;
+  }
 
-nav {
-  margin: 10px 0;
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-}
+  nav {
+    margin: 10px 0;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
 
-.name {
-  color: #58d68d
-}
+  .name {
+    color: #58d68d;
+  }
 </style>

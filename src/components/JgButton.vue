@@ -3,7 +3,7 @@
     to: {
       type: String,
       default: "none",
-    }
+    },
   });
 </script>
 

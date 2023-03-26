@@ -8,6 +8,6 @@ const useEventListener = (source, event, handler) => {
   onUnmounted(() => {
     source.removeEventListener(event, handler);
   });
-}
+};
 
 export default useEventListener;

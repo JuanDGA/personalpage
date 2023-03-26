@@ -1,12 +1,12 @@
 * {
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-    font-family: Roboto, sans-serif;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: Roboto, sans-serif;
 }
 
 main {
-    background-color: #172a17;
-    color: #FDFEFE;
-    min-height: 100vh;
+  background-color: #172a17;
+  color: #fdfefe;
+  min-height: 100vh;
 }
