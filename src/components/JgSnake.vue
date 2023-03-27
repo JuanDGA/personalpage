@@ -93,7 +93,7 @@
   const checkGrowing = () => {
     if (growQueue.value.length === 0) return;
     const nextFood = growQueue.value[0];
-    const inSnake = snake.value.some(it => it[0] === nextFood[0] && it[1] === nextFood[1]);
+    const inSnake = snake.value.some((it) => it[0] === nextFood[0] && it[1] === nextFood[1]);
     if (inSnake) return;
     snake.value.push(growQueue.value.shift());
   };
@@ -106,7 +106,7 @@
         x = Math.floor(Math.random() * 22);
         y = Math.floor(Math.random() * 22);
         currentFood.value = [x, y];
-        foodIsMissing.value = snake.value.some(it => it[0] === x && it[1] === y);
+        foodIsMissing.value = snake.value.some((it) => it[0] === x && it[1] === y);
       }
     } else {
       x = currentFood.value[0];
@@ -126,7 +126,7 @@
       y -= 2;
       getCtx().fillRect(x, y, 19, 19);
     }
-  }
+  };
 
   const drawSnake = () => {
     for (let j = 0; j < snake.value.length; j++) {

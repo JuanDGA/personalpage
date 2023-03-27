@@ -6,6 +6,7 @@
 
 <template>
   <main>
+    <jg-button to="/" v-if="$route.path !== '/'">Game</jg-button>
     <div class="first-look">
       <img class="profile" :src="profile" alt="Profile image of Juan David Guevara Arevalo" />
       <h1 class="name">Juan David Guevara Arevalo</h1>
@@ -15,6 +16,7 @@
       <jg-button to="/education">Education</jg-button>
       <jg-button to="/projects">Projects</jg-button>
       <jg-button to="/skills">Skills</jg-button>
+      <jg-button to="/contact">Contact</jg-button>
     </nav>
     <div>
       <RouterView />

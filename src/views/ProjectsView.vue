@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="description">
+    <div>
       I am a very enthusiastic person who likes to explore ideas, which is why I have developed and
       participated in various projects. Here you can find the list:
     </div>
@@ -31,22 +31,27 @@
         </li>
       </ol>
     </div>
+    <div class="neo">
+      In addition, I'm currently working on
+      <a target="_blank" href="https://neoventix.com/">Neoventix.</a>
+      Which is an AI project aimed at improving the usability and the functionalities of the tools
+      that I'm developing, such as
+      <a target="_blank" href="https://scheduler.neoventix.com/">NeoScheduler,</a> a product of
+      <a target="_blank" href="https://neoventix.com/">Neoventix.</a>
+    </div>
   </div>
 </template>
 
 <style scoped>
   .container {
     max-width: 90vw;
+    width: 750px;
     margin: 20px auto;
     font-size: 1.3em;
   }
 
-  .container .description {
-    text-align: center;
-  }
-
   .container .projects-lst {
-    margin-top: 30px;
+    margin: 30px 0;
     display: flex;
     justify-content: center;
   }
