@@ -1,4 +1,6 @@
 <script setup>
+  import JgLink from "@/components/JgLink.vue";
+
   defineProps({
     items: {
       type: Array,
@@ -10,11 +12,11 @@
 <template>
   <div class="icons">
     <div v-for="(item, i) in items" class="logo" :key="i">
-      <div class="icon-container">
+      <jg-link class="icon-container" :class="{'link': item.href}" :href="item.href">
         <img :src="item.img" :alt="item.name + ' logo'" class="icon"/>
         <span :style="{background: item.bg}">{{item.name}}</span>
         <div class="skill-level">{{item.level}}</div>
-      </div>
+      </jg-link>
     </div>
   </div>
 </template>
@@ -67,5 +69,10 @@
 
 .icon:hover {
   transform: scale(105%);
+}
+
+.link {
+  cursor: pointer;
+  text-decoration: none;
 }
 </style>

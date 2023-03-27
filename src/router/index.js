@@ -23,6 +23,11 @@ const router = createRouter({
       name: "skills",
       component: () => import("../views/SkillsView.vue"),
     },
+    {
+      path: "/contact",
+      name: "contact",
+      component: () => import("../views/ContactView.vue"),
+    },
     { path: "/:pathMatch(.*)*", redirect: "/" },
   ],
 });

@@ -7,7 +7,7 @@
     <div class="projects-lst">
       <ol>
         <li>
-          QuycaFa Newpaper:
+          QuycaFa Newspaper:
           <a target="_blank" href="https://periodicoquycafa.netlify.app/">QuycaFa</a> (Developed
           during school)
         </li>
