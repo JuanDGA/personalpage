@@ -10,12 +10,21 @@
   import english from "@/assets/icons/english.png";
   import spanish from "@/assets/icons/spanish.png";
   import german from "@/assets/icons/german.png";
+  import teamwork from "@/assets/icons/teamwork.png";
+  import creativity from "@/assets/icons/creativity.png";
+  import leadership from "@/assets/icons/leadership.png";
   import JgIconsList from "@/components/JgIconsList.vue";
+
+  const generalSkills = [
+    {name: "Teamwork", img: teamwork, bg: "linear-gradient(90deg, #FFCD38, #49C3E0, #3AC7B4, #DA5B65)"},
+    {name: "Creativity", img: creativity, bg: "linear-gradient(90deg, #3498db, #2ecc71)"},
+    {name: "Leadership", img: leadership, bg: "linear-gradient(90deg, #599ED3, #FFD33B)"},
+  ];
 
   const programmingLanguages = [
     {name: "Kotlin", img: kotlin, level: "Advanced", bg: "linear-gradient(90deg, #0096D6, #816EE4, #C856BD, #F88A02, #F88A02)"},
     {name: "Java", img: java, level: "Advanced", bg: "linear-gradient(90deg, #72A0FA, #DB380E)"},
-    {name: "Python", img: python, level: "Advanced", bg: "linear-gradient(90deg, #599ED3, #FFD33B)"},
+    {name: "Python", img: python, level: "Advanced", bg: "linear-gradient(90deg, #63C8CD, #EF9F35)"},
     {name: "Javascript", img: js, level: "Expert", bg: "#FFDD51"},
   ];
 
@@ -35,6 +44,10 @@
 
 <template>
   <div class="container">
+    <div class="row">
+      <h3 class="title">General skills</h3>
+      <jg-icons-list :items="generalSkills"/>
+    </div>
     <div class="row">
       <h3 class="title">Programming languages</h3>
       <jg-icons-list :items="programmingLanguages"/>
