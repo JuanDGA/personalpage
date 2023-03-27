@@ -45,8 +45,9 @@
 }
 
 .icon-container span {
-  background-clip: text;
-  color: transparent;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
   font-weight: bold;
   font-size: 1.5rem;
 }
