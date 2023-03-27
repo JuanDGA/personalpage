@@ -66,9 +66,10 @@
   }
 
   .neo a {
-    background-image: linear-gradient(90deg, #8ad5e8, #16bbe5, #0077c9);
-    background-clip: text;
-    color: transparent;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+    background: linear-gradient(90deg, #8ad5e8, #16bbe5, #0077c9);
   }
 
   a {
