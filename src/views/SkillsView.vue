@@ -13,23 +13,23 @@
   import JgIconsList from "@/components/JgIconsList.vue";
 
   const programmingLanguages = [
-    {name: "Kotlin", img: kotlin, level: "Advanced"},
-    {name: "Java", img: java, level: "Advanced"},
-    {name: "Python", img: python, level: "Advanced"},
-    {name: "Javascript", img: js, level: "Expert"},
+    {name: "Kotlin", img: kotlin, level: "Advanced", bg: "linear-gradient(90deg, #0096D6, #816EE4, #C856BD, #F88A02, #F88A02)"},
+    {name: "Java", img: java, level: "Advanced", bg: "linear-gradient(90deg, #72A0FA, #DB380E)"},
+    {name: "Python", img: python, level: "Advanced", bg: "linear-gradient(90deg, #599ED3, #FFD33B)"},
+    {name: "Javascript", img: js, level: "Expert", bg: "#FFDD51"},
   ];
 
   const frameworks = [
-    {name: "SpringBoot", img: spring, level: "Advanced"},
-    {name: "Vue", img: vue, level: "Expert"},
-    {name: "React", img: react, level: "Intermediate"},
-    {name: "Angular", img: angular, level: "Intermediate"},
+    {name: "SpringBoot", img: spring, level: "Advanced", bg: "#6DC647"},
+    {name: "Vue", img: vue, level: "Expert", bg: "linear-gradient(90deg, #42D392, #5F8BEE)"},
+    {name: "React", img: react, level: "Intermediate", bg: "#60DAFA"},
+    {name: "Angular", img: angular, level: "Intermediate", bg: "linear-gradient(90deg, #DE002D, #C4002B)"},
   ];
 
   const languages = [
-    {name: "English", img: english, level: "Advanced"},
-    {name: "German", img: german, level: "Novice"},
-    {name: "Spanish", img: spanish, level: "Primary language"},
+    {name: "English", img: english, level: "Advanced", bg: "linear-gradient(90deg, #C9082A, #F2F2F2)"},
+    {name: "German", img: german, level: "Novice", bg: "linear-gradient(90deg, #DD0000, #FFCE00)"},
+    {name: "Spanish", img: spanish, level: "Primary language", bg: "linear-gradient(90deg, #FFCE00, #599ED3, #C9082A)"},
   ];
 </script>
 
