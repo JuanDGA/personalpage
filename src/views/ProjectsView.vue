@@ -83,3 +83,6 @@
     font-size: 1.1em;
   }
 </style>
+<script setup>
+import JgMarsLander from "@/components/JgMarsLander.vue";
+</script>
