@@ -16,29 +16,63 @@
   import JgIconsList from "@/components/JgIconsList.vue";
 
   const generalSkills = [
-    {name: "Teamwork", img: teamwork, bg: "linear-gradient(90deg, #FFCD38, #49C3E0, #3AC7B4, #DA5B65)"},
-    {name: "Creativity", img: creativity, bg: "linear-gradient(90deg, #3498db, #2ecc71)"},
-    {name: "Leadership", img: leadership, bg: "linear-gradient(90deg, #599ED3, #FFD33B)"},
+    {
+      name: "Teamwork",
+      img: teamwork,
+      bg: "linear-gradient(90deg, #FFCD38, #49C3E0, #3AC7B4, #DA5B65)",
+    },
+    { name: "Creativity", img: creativity, bg: "linear-gradient(90deg, #3498db, #2ecc71)" },
+    { name: "Leadership", img: leadership, bg: "linear-gradient(90deg, #599ED3, #FFD33B)" },
   ];
 
   const programmingLanguages = [
-    {name: "Kotlin", img: kotlin, level: "Advanced", bg: "linear-gradient(90deg, #0096D6, #816EE4, #C856BD, #F88A02, #F88A02)"},
-    {name: "Java", img: java, level: "Advanced", bg: "linear-gradient(90deg, #72A0FA, #DB380E)"},
-    {name: "Python", img: python, level: "Advanced", bg: "linear-gradient(90deg, #63C8CD, #EF9F35)"},
-    {name: "Javascript", img: js, level: "Expert", bg: "#FFDD51"},
+    {
+      name: "Kotlin",
+      img: kotlin,
+      level: "Advanced",
+      bg: "linear-gradient(90deg, #0096D6, #816EE4, #C856BD, #F88A02, #F88A02)",
+    },
+    { name: "Java", img: java, level: "Advanced", bg: "linear-gradient(90deg, #72A0FA, #DB380E)" },
+    {
+      name: "Python",
+      img: python,
+      level: "Advanced",
+      bg: "linear-gradient(90deg, #63C8CD, #EF9F35)",
+    },
+    { name: "Javascript", img: js, level: "Expert", bg: "#FFDD51" },
   ];
 
   const frameworks = [
-    {name: "SpringBoot", img: spring, level: "Advanced", bg: "#6DC647"},
-    {name: "Vue", img: vue, level: "Expert", bg: "linear-gradient(90deg, #42D392, #5F8BEE)"},
-    {name: "React", img: react, level: "Intermediate", bg: "#60DAFA"},
-    {name: "Angular", img: angular, level: "Intermediate", bg: "linear-gradient(90deg, #DE002D, #C4002B)"},
+    { name: "SpringBoot", img: spring, level: "Advanced", bg: "#6DC647" },
+    { name: "Vue", img: vue, level: "Expert", bg: "linear-gradient(90deg, #42D392, #5F8BEE)" },
+    { name: "React", img: react, level: "Intermediate", bg: "#60DAFA" },
+    {
+      name: "Angular",
+      img: angular,
+      level: "Intermediate",
+      bg: "linear-gradient(90deg, #DE002D, #C4002B)",
+    },
   ];
 
   const languages = [
-    {name: "English", img: english, level: "Advanced", bg: "linear-gradient(90deg, #C9082A, #F2F2F2)"},
-    {name: "German", img: german, level: "Novice", bg: "linear-gradient(90deg, #DD0000, #FFCE00)"},
-    {name: "Spanish", img: spanish, level: "Primary language", bg: "linear-gradient(90deg, #FFCE00, #599ED3, #C9082A)"},
+    {
+      name: "English",
+      img: english,
+      level: "Advanced",
+      bg: "linear-gradient(90deg, #C9082A, #F2F2F2)",
+    },
+    {
+      name: "German",
+      img: german,
+      level: "Novice",
+      bg: "linear-gradient(90deg, #DD0000, #FFCE00)",
+    },
+    {
+      name: "Spanish",
+      img: spanish,
+      level: "Primary language",
+      bg: "linear-gradient(90deg, #FFCE00, #599ED3, #C9082A)",
+    },
   ];
 </script>
 
@@ -46,19 +80,19 @@
   <div class="container">
     <div class="row">
       <h3 class="title">General skills</h3>
-      <jg-icons-list :items="generalSkills"/>
+      <jg-icons-list :items="generalSkills" />
     </div>
     <div class="row">
       <h3 class="title">Programming languages</h3>
-      <jg-icons-list :items="programmingLanguages"/>
+      <jg-icons-list :items="programmingLanguages" />
     </div>
     <div class="row">
       <h3 class="title">Frameworks</h3>
-      <jg-icons-list :items="frameworks"/>
+      <jg-icons-list :items="frameworks" />
     </div>
     <div class="row">
       <h3 class="title">Languages</h3>
-      <jg-icons-list :items="languages"/>
+      <jg-icons-list :items="languages" />
     </div>
   </div>
 </template>

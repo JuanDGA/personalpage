@@ -40,9 +40,19 @@
       <a target="_blank" href="https://neoventix.com/">Neoventix.</a>
     </div>
   </div>
+  <div>
+    <h1 class="center">Preview projects</h1>
+  </div>
+  <div>
+    <jg-mars-lander />
+  </div>
 </template>
 
 <style scoped>
+  .center {
+    text-align: center;
+  }
+
   .container {
     max-width: 90vw;
     width: 750px;
@@ -84,5 +94,5 @@
   }
 </style>
 <script setup>
-import JgMarsLander from "@/components/JgMarsLander.vue";
+  import JgMarsLander from "@/components/JgMarsLander.vue";
 </script>

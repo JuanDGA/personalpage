@@ -4,6 +4,6 @@
 
 <template>
   <app-wrapper>
-    <RouterView/>
+    <RouterView />
   </app-wrapper>
 </template>

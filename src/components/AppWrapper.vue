@@ -1,5 +1,5 @@
 <script setup>
-  import JgButton from "@/components/JgButton.vue"
+  import JgButton from "@/components/JgButton.vue";
   import JgHeader from "@/components/JgHeader.vue";
 </script>
 
