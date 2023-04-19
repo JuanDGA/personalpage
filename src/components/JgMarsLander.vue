@@ -2,12 +2,20 @@
   import { onMounted, ref, watch } from "vue";
   import useGeneticLander from "@/algorithms/marsLander/useGeneticLander";
   import { SurfaceMap } from "@/algorithms/marsLander/useSurfaceMap";
-  import { Position } from "@/algorithms/marsLander/utils";
+  import { Position, randInt } from "@/algorithms/marsLander/utils";
   import useSimulation, { SimulationStatus } from "@/algorithms/marsLander/useSimulation";
+
+  const width = window.innerWidth * 0.7;
+  const height = window.innerHeight * 0.7;
+
+  const getRelativeX = (x) => (x * width) / 7000;
+  const getRelativeY = (y) => height - ((y * height) / 3000);
+
+  const sky = ref([]);
 
   const surface = new SurfaceMap();
 
-  const {population, status, init, improve, setUp: setUpLander, initialLander, chromosomeComparator, configuration} = useGeneticLander(surface);
+  const {population, init, improve, setUp: setUpLander, initialLander, chromosomeComparator, configuration, state} = useGeneticLander(surface);
 
   const board = ref();
 
@@ -27,17 +35,85 @@
     surface.addSurfacePoint(new Position(6999, 0));
   }
 
+  const paintSky = (initialize = false) => {
+    if (initialize) sky.value = [];
+    getCtx().fillStyle = "#fff";
+    for (let i = 0; i < 40; i++) {
+      getCtx().beginPath();
+      let pos;
+      if (!initialize) {
+        pos = sky.value[i];
+      } else {
+        pos = new Position(randInt(0, width), randInt(0, height));
+        sky.value.push(pos);
+      }
+      getCtx().arc(pos.x, pos.y, 1, 0, 2 * Math.PI);
+      getCtx().closePath();
+      getCtx().fill();
+    }
+    getCtx().fillStyle = "#3498db";
+    getCtx().beginPath();
+    let earthPos;
+    if (!initialize) {
+      earthPos = sky.value[sky.value.length - 1];
+    } else {
+      earthPos = new Position(randInt(0, width), randInt(0, height / 3));
+      sky.value.push(earthPos);
+    }
+
+    getCtx().arc(earthPos.x, earthPos.y, 2, 0, 2 * Math.PI);
+    getCtx().closePath();
+    getCtx().fill()
+  }
+
   const paintMap = (initialize = false) => {
     if (initialize) initSurface();
     getCtx().fillStyle = "#d72c2c";
     getCtx().beginPath();
-    getCtx().moveTo(surface.points[0].x, 300 - surface.points[0].y);
+    getCtx().moveTo(getRelativeX(surface.points[0].x), getRelativeY(surface.points[0].y));
 
     for (let i = 1; i < surface.points.length; i++) {
       const point = surface.points[i];
-      getCtx().lineTo(point.x / 10, 300 - point.y / 10);
+      getCtx().lineTo(getRelativeX(point.x), getRelativeY(point.y));
     }
 
+    getCtx().closePath();
+    getCtx().fill();
+  }
+
+  const paintLander = () => {
+    console.log(state.value.x, state.value.y)
+    const origin = new Position(getRelativeX(state.value.x), getRelativeY(state.value.y));
+
+    const bodyColor = "#5dade2";
+    const flameColor1 = "#FFA500";
+    const flameColor2 = "#FF4500";
+
+    // Draw rocket body
+    getCtx().fillStyle = bodyColor;
+    getCtx().beginPath();
+    getCtx().moveTo(origin.x + 5, origin.y);
+    getCtx().lineTo(origin.x + 5, origin.y - 20);
+    getCtx().lineTo(origin.x, origin.y - 30);
+    getCtx().lineTo(origin.x - 5, origin.y - 20);
+    getCtx().lineTo(origin.x - 5, origin.y);
+    getCtx().closePath();
+    getCtx().fill();
+
+    // Draw rocket flames
+    getCtx().fillStyle = flameColor1;
+    getCtx().beginPath();
+    getCtx().moveTo(origin.x - 3, origin.y);
+    getCtx().lineTo(origin.x, origin.y + ((30 * state.value.power) / 4));
+    getCtx().lineTo(origin.x + 3, origin.y);
+    getCtx().closePath();
+    getCtx().fill();
+
+    getCtx().fillStyle = flameColor2;
+    getCtx().beginPath();
+    getCtx().moveTo(origin.x - 2, origin.y);
+    getCtx().lineTo(origin.x, origin.y + ((10 * state.value.power) / 4));
+    getCtx().lineTo(origin.x + 2, origin.y);
     getCtx().closePath();
     getCtx().fill();
   }
@@ -48,27 +124,31 @@
     getCtx().strokeStyle = color;
     for (let solution of pop) {
       getCtx().beginPath();
-      getCtx().moveTo(initialLander.value.x / 10, 300 - (initialLander.value.y / 10));
+      getCtx().moveTo(getRelativeX(initialLander.value.x), getRelativeY(initialLander.value.y));
       for (let action of solution) {
         nextState(action);
         const pos = getPosition();
-        getCtx().lineTo(pos.x / 10, 300 - (pos.y / 10));
+        getCtx().lineTo(getRelativeX(pos.x), getRelativeY(pos.y));
         if (SimulationStatus.isFinish(status.value)) break;
       }
       getCtx().closePath();
       getCtx().stroke();
       reset();
     }
+    paintLander();
   }
 
   const setUp = (initialize = false, initLander = true) => {
-    const gradient = getCtx().createLinearGradient(0, 300, 0, 0);
+    const gradient = getCtx().createLinearGradient(0, height, 0, 0);
     gradient.addColorStop(0, "#ff8181")
     gradient.addColorStop(1, "#ed8aff")
     getCtx().fillStyle = gradient;
-    getCtx().fillRect(0, 0, 700, 300);
+    getCtx().fillRect(0, 0, width, height);
+    paintSky(initialize);
     paintMap(initialize);
-    if (initLander) setUpLander(2500, 2700, 0, 0, 0, 0, 550);
+    if (initLander) {
+      setUpLander(2500, 2700, 0, 0, 0, 0, 550);
+    }
   }
 
   onMounted(() => {
@@ -79,16 +159,17 @@
     const sortedPopulation = [...value].sort(chromosomeComparator);
     paintPopulation(sortedPopulation.slice(10, sortedPopulation.length));
     paintPopulation(sortedPopulation.slice(0, 10), {clear: false, color: "#2ecc71"});
+  });
+
+  watch(state, () => {
+    console.log("Painting lander");
+    paintLander();
   }, {deep: true});
 </script>
 
 <template>
   <div class="container">
-    <h2>Mars Lander:</h2>
-    <p class="codingame">
-      I recently took on the Mars Lander challenge on the <a href="https://www.codingame.com/training/expert/mars-lander-episode-3" target="_blank">Codingame</a> platform. I originally wrote my solution in Kotlin, but I've also adapted it to JavaScript. Check it out!
-    </p>
-    <h4>{{status}}</h4>
+    <h2 class="center">This page is optimized for desktop</h2>
     <button @click="init">Create first population</button>
     <button v-if="population.length > 0" @click="improve">Find solution</button>
     <input type="range" min="10" max="100" v-model="configuration.population_size">
@@ -100,7 +181,7 @@
     <input type="range" min="4" :max="configuration.population_size" v-model="configuration.selection_size">
     <span>Current selection size: {{configuration.elitism_size}}</span>
     <div class="centered">
-      <canvas ref="board" width="700" height="300" />
+      <canvas ref="board" :width="width" :height="height" />
     </div>
   </div>
 </template>
@@ -118,15 +199,12 @@
       justify-content: center;
   }
 
-  p {
-      margin: 10px auto;
+  .center {
+      text-align: center;
   }
 
-  .codingame a {
-      -webkit-background-clip: text !important;
-      -webkit-text-fill-color: transparent !important;
-      background-clip: text !important;
-      background: linear-gradient(90deg, #F2BB13, #F7B003);
+  p {
+      margin: 10px auto;
   }
 
   a {

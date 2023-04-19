@@ -1,12 +1,20 @@
 <script setup>
   import JgButton from "@/components/JgButton.vue";
   import JgHeader from "@/components/JgHeader.vue";
+  import { useRoute } from "vue-router";
+  import { computed } from "vue";
+
+  const route = useRoute();
+
+  const show = computed(() => route.name ? !route.name.includes('preview') : false);
 </script>
 
 <template>
   <main>
-    <jg-button to="/" v-if="$route.path !== '/'" class="game-btn">Game</jg-button>
-    <jg-header />
+    <div v-if="show">
+      <jg-button to="/" v-if="$route.path !== '/'" class="game-btn">Game</jg-button>
+      <jg-header />
+    </div>
     <nav>
       <jg-button to="/education">Education</jg-button>
       <jg-button to="/projects">Projects</jg-button>
