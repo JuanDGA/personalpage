@@ -23,23 +23,32 @@ const useLander = () => {
   }
 
   const advance = (gene) => {
-    state.value.power = state.value.power + gene.power > 4 ? 4 : state.value.power + gene.power < 0 ? 0 : state.value.power + gene.power
-    state.value.angle = state.value.angle + gene.angle > 90 ? 90 : state.value.angle + gene.angle < -90 ? -90 : state.value.angle + gene.angle
+    let power = state.value.power + gene.power;
+    let angle = state.value.angle + gene.angle;
 
-    if (state.value.fuel <= state.value.power) {
-      state.value.power = state.value.fuel
-    }
+    if (power < 0) power = 0;
+    if (power > 4) power = 4;
+    if (angle < -90) angle = -90;
+    if (angle > 90) angle = 90;
 
-    state.value.fuel -= state.value.power
+    const aX = power * Math.cos(toRadians(angle + 90));
+    const aY = -3.711 + (power * Math.sin(toRadians(angle + 90)));
 
-    const aX = state.value.power * Math.cos(toRadians(state.value.angle + 90))
-    const aY =  -3.711 + (state.value.power * Math.sin(toRadians(state.value.angle + 90)))
+    const newX = state.value.x + state.value.vx + (0.5 * aX);
+    const newY = state.value.y + state.value.vy + (0.5 * aY);
 
-    state.value.x = state.value.x + state.value.vx + (0.5 * aX);
-    state.value.y = state.value.y + state.value.vy + (0.5 * aY);
+    const newVx = state.value.vx + aX;
+    const newVy = state.value.vy + aY;
 
-    state.value.vx = state.value.vx + aX
-    state.value.vy = state.value.vy + aY
+    state.value.x = newX;
+    state.value.y = newY;
+
+    state.value.vx = newVx;
+    state.value.vy = newVy;
+
+    state.value.fuel = state.value.fuel - power;
+    state.value.power = power;
+    state.value.angle = angle;
   }
 
   return {state, setUp, advance}
