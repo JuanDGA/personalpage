@@ -6,7 +6,7 @@ import useLander from "@/algorithms/marsLander/useLander";
 const useGeneticLander = (surfaceMap) => {
   const configuration = ref({
     population_size: 40,
-    chromosome_size: 90,
+    chromosome_size: 20,
     selection_size: 20,
     elitism_size: 4,
     strategy: "MATE",

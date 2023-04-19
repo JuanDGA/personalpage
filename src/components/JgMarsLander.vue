@@ -7,7 +7,7 @@
 
   const surface = new SurfaceMap();
 
-  const {population, status, init, improve, setUp: setUpLander, initialLander, chromosomeComparator} = useGeneticLander(surface);
+  const {population, status, init, improve, setUp: setUpLander, initialLander, chromosomeComparator, configuration} = useGeneticLander(surface);
 
   const board = ref();
 
@@ -91,6 +91,14 @@
     <h4>{{status}}</h4>
     <button @click="init">Create first population</button>
     <button v-if="population.length > 0" @click="improve">Find solution</button>
+    <input type="range" min="10" max="100" v-model="configuration.population_size">
+    <span>Current population: {{configuration.population_size}}</span>
+    <input type="range" min="0" max="200" v-model="configuration.chromosome_size">
+    <span>Current chromosome size: {{configuration.chromosome_size}}</span>
+    <input type="range" min="0" :max="configuration.population_size" v-model="configuration.elitism_size">
+    <span>Current elitism size: {{configuration.elitism_size}}</span>
+    <input type="range" min="4" :max="configuration.population_size" v-model="configuration.selection_size">
+    <span>Current selection size: {{configuration.elitism_size}}</span>
     <div class="centered">
       <canvas ref="board" width="700" height="300" />
     </div>
