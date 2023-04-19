@@ -2,7 +2,7 @@
   import { onMounted, ref, watch } from "vue";
   import useGeneticLander from "@/algorithms/marsLander/useGeneticLander";
   import { SurfaceMap } from "@/algorithms/marsLander/useSurfaceMap";
-  import { Position, randInt } from "@/algorithms/marsLander/utils";
+  import { Position, randInt, toRadians } from "@/algorithms/marsLander/utils";
   import useSimulation, { SimulationStatus } from "@/algorithms/marsLander/useSimulation";
 
   const width = window.innerWidth * 0.7;
@@ -15,7 +15,7 @@
 
   const surface = new SurfaceMap();
 
-  const {population, init, improve, setUp: setUpLander, initialLander, chromosomeComparator, configuration, state} = useGeneticLander(surface);
+  const {population, init, improve, setUp: setUpLander, initialLander, chromosomeComparator, resetConfig, configuration, state, currentGeneration, betterChromosome} = useGeneticLander(surface);
 
   const board = ref();
 
@@ -82,12 +82,13 @@
   }
 
   const paintLander = () => {
-    console.log(state.value.x, state.value.y)
     const origin = new Position(getRelativeX(state.value.x), getRelativeY(state.value.y));
 
     const bodyColor = "#5dade2";
     const flameColor1 = "#FFA500";
     const flameColor2 = "#FF4500";
+
+    getCtx().rotate(-toRadians(state.value.angle));
 
     // Draw rocket body
     getCtx().fillStyle = bodyColor;
@@ -120,6 +121,11 @@
 
   const paintPopulation = (pop, {clear, color} = {clear: true, color: "#f4d03f"}) => {
     if (clear) setUp(false, false);
+    getCtx().font = "30px Arial";
+    getCtx().fillText(`Generation: ${currentGeneration.value}`, 10, 50);
+    getCtx().fillText(`Better sequence:`, 10, 100);
+    getCtx().fillText(`\t\tLength: ${betterChromosome.value.sequence.length}`, 10, 150);
+    getCtx().fillText(`\t\tScore: ${betterChromosome.value.score}`, 10, 200);
     const {nextState, getPosition, reset, status} = useSimulation(initialLander, surface);
     getCtx().strokeStyle = color;
     for (let solution of pop) {
@@ -162,7 +168,6 @@
   });
 
   watch(state, () => {
-    console.log("Painting lander");
     paintLander();
   }, {deep: true});
 </script>
@@ -172,14 +177,30 @@
     <h2 class="center">This page is optimized for desktop</h2>
     <button @click="init">Create first population</button>
     <button v-if="population.length > 0" @click="improve">Find solution</button>
-    <input type="range" min="10" max="100" v-model="configuration.population_size">
-    <span>Current population: {{configuration.population_size}}</span>
-    <input type="range" min="0" max="200" v-model="configuration.chromosome_size">
-    <span>Current chromosome size: {{configuration.chromosome_size}}</span>
-    <input type="range" min="0" :max="configuration.population_size" v-model="configuration.elitism_size">
-    <span>Current elitism size: {{configuration.elitism_size}}</span>
-    <input type="range" min="4" :max="configuration.population_size" v-model="configuration.selection_size">
-    <span>Current selection size: {{configuration.elitism_size}}</span>
+    <div>
+      <div>Current population: {{configuration.population_size}}</div>
+      <input type="range" min="10" max="100" v-model="configuration.population_size">
+      <input type="number" min="10" max="100" v-model="configuration.population_size">
+    </div>
+    <div>
+      <div>Current chromosome size: {{configuration.chromosome_size}}</div>
+      <input type="range" min="0" max="200" v-model="configuration.chromosome_size">
+      <input type="number" min="0" max="200" v-model="configuration.chromosome_size">
+    </div>
+    <div>
+      <div>Current elitism size: {{configuration.elitism_size}}</div>
+      <input type="range" min="0" :max="configuration.population_size" v-model="configuration.elitism_size">
+      <input type="number" min="0" :max="configuration.population_size" v-model="configuration.elitism_size">
+    </div>
+    <div>
+      <div>Current selection size: {{configuration.selection_size}}</div>
+      <input type="range" min="4" :max="configuration.population_size" v-model="configuration.selection_size">
+      <input type="number" min="4" :max="configuration.population_size" v-model="configuration.selection_size">
+    </div>
+    <div>
+      <div>Strategy: {{configuration.strategy}}</div>
+    </div>
+    <button @click="resetConfig">Reset config</button>
     <div class="centered">
       <canvas ref="board" :width="width" :height="height" />
     </div>

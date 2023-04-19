@@ -3,10 +3,19 @@ import useSimulation, { SimulationResult, SimulationStatus } from "@/algorithms/
 import { Gene, hypot, Position, pow, randInt, sleep, toDegrees } from "@/algorithms/marsLander/utils";
 import useLander from "@/algorithms/marsLander/useLander";
 
+const defaultConfiguration = {
+  population_size: 60,
+  chromosome_size: 100,
+  selection_size: 20,
+  elitism_size: 4,
+  strategy: "MATE",
+  mutation_probability: 0.1,
+}
+
 const useGeneticLander = (surfaceMap) => {
   const configuration = ref({
-    population_size: 40,
-    chromosome_size: 20,
+    population_size: 60,
+    chromosome_size: 100,
     selection_size: 20,
     elitism_size: 4,
     strategy: "MATE",
@@ -21,6 +30,11 @@ const useGeneticLander = (surfaceMap) => {
   const {state, reset} = useSimulation(initialLander, surfaceMap);
 
   const currentStatus = ref(SimulationStatus.FLYING);
+  const currentGeneration = ref(0);
+  const betterChromosome = ref({
+    sequence: [],
+    score: -1,
+  });
 
   const init = () => {
     const newPopulation = []
@@ -31,19 +45,24 @@ const useGeneticLander = (surfaceMap) => {
       }
       newPopulation.push(chromosome);
     }
-    population.value = newPopulation
+    population.value = newPopulation.sort(chromosomeComparator);
+    betterChromosome.value.score = evaluateChromosome(population.value[0]);
+    betterChromosome.value.sequence = population.value[0]
   }
 
   const improve = async () => {
     while (currentStatus.value !== SimulationStatus.LANDING) {
+      currentGeneration.value += 1;
       population.value = crossover(select());
-      await sleep(1000);
+      await sleep(500);
     }
   }
 
   const select = () => {
     const selectedPopulation = [];
     const sortedPopulation = [...population.value].sort(chromosomeComparator);
+    betterChromosome.value.score = evaluateChromosome(sortedPopulation[0]);
+    betterChromosome.value.sequence = sortedPopulation[0];
     selectedPopulation.push(...sortedPopulation.slice(0, configuration.value.elitism_size));
 
     while (selectedPopulation.length < configuration.value.selection_size) {
@@ -146,18 +165,20 @@ const useGeneticLander = (surfaceMap) => {
     const intersections = surfaceMap.getIntersections(lastPosition.value.x, lastPosition.value.y, target.x, target.y + 1);
     const degreeToTarget = relativeAngle(currentPosition.value);
 
+    if (!SimulationStatus.isFinish(lastStatus)) return Infinity;
+
     let finalEvaluation = 0;
 
     switch (lastStatus) {
       case SimulationStatus.LOST:
-        finalEvaluation = 40000 + 40000 * (intersections - degreeToTarget);
+        finalEvaluation = 40000 + 40000 * (intersections * degreeToTarget);
         break;
       case SimulationStatus.CRASH:
-        finalEvaluation = 30000 + 30000 * (intersections - degreeToTarget) + hypot(target.x - currentPosition.value.x, target.y - currentPosition.value.y);
+        finalEvaluation = 30000 + 30000 * (intersections * degreeToTarget) + hypot(target.x - currentPosition.value.x, target.y - currentPosition.value.y);
         break;
-      case SimulationStatus.FLYING:
-        finalEvaluation = 20000 + 20000 * (intersections - degreeToTarget) + hypot(target.x - currentPosition.value.x, target.y - currentPosition.value.y);
-        break;
+      // case SimulationStatus.FLYING:
+      //   finalEvaluation = 20000 + 20000 * (intersections * degreeToTarget) + hypot(target.x - currentPosition.value.x, target.y - currentPosition.value.y);
+      //   break;
       case SimulationStatus.LANDING_CRASH:
         finalEvaluation = 10000 + Math.abs(lander.value.vx) + Math.abs(lander.value.vy) + Math.abs(lander.value.angle);
         break;
@@ -178,8 +199,14 @@ const useGeneticLander = (surfaceMap) => {
     return 0;
   }
 
+  const resetConfig = () => {
+    for (let i = 0; i < Object.keys(defaultConfiguration).length; i++) {
+      const key = Object.keys(defaultConfiguration)[i];
+      configuration.value[key] = defaultConfiguration[key];
+    }
+  }
+
   watch(initialLander, () => {
-    console.log("CHANGING");
     reset();
   }, {deep: true});
 
@@ -189,11 +216,14 @@ const useGeneticLander = (surfaceMap) => {
     state,
     configuration,
     population,
+    currentGeneration,
+    betterChromosome,
     init,
     improve,
     setUp,
     evaluateChromosome,
     chromosomeComparator,
+    resetConfig,
   };
 }
 

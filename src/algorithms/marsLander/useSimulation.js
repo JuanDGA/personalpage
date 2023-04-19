@@ -58,7 +58,7 @@ const useSimulation = (initialLander, surface) => {
     if (x < 0 || x > 6999 || y > 2999) status.value = SimulationStatus.LOST;
     else if (!inTerrain) status.value = SimulationStatus.FLYING;
     else if (x < landing.x - 250 || x > landing.x + 250) status.value = SimulationStatus.CRASH;
-    else if (angle !== 0 || Math.abs(vx) > 20 || Math.abs(vy) > 40) status.value = SimulationStatus.CRASH;
+    else if (angle !== 0 || Math.abs(vx) > 20 || Math.abs(vy) > 40) status.value = SimulationStatus.LANDING_CRASH;
     else status.value = SimulationStatus.LANDING;
   }
 
