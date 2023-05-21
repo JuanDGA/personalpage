@@ -22,72 +22,73 @@ const useGeneticLander = (surfaceMap) => {
     mutation_probability: 0.1,
   });
 
-  const status = ref("")
+  const status = ref("");
 
-  const population = ref([]);
+  const populationScores = ref([]);
 
   const {state: initialLander, setUp} = useLander();
   const {state, reset} = useSimulation(initialLander, surfaceMap);
 
   const currentStatus = ref(SimulationStatus.FLYING);
   const currentGeneration = ref(0);
-  const betterChromosome = ref({
-    sequence: [],
-    score: -1,
-  });
 
   const init = () => {
-    const newPopulation = []
+    populationScores.value.length = [];
+    const newPopulationScores = [];
     for (let i = 0; i < configuration.value.population_size; i++) {
       const chromosome = []
       for (let j = 0; j < configuration.value.chromosome_size; j++) {
         chromosome.push(Gene.random());
       }
-      newPopulation.push(chromosome);
+      newPopulationScores.push({chromosome, score: evaluateChromosome(chromosome)});
     }
-    population.value = newPopulation.sort(chromosomeComparator);
-    betterChromosome.value.score = evaluateChromosome(population.value[0]);
-    betterChromosome.value.sequence = population.value[0]
+    populationScores.value = newPopulationScores;
   }
 
   const improve = async () => {
-    while (currentStatus.value !== SimulationStatus.LANDING) {
-      currentGeneration.value += 1;
-      population.value = crossover(select());
-      await sleep(500);
-    }
+    currentGeneration.value += 1;
+    let c = Date.now();
+    const selected = select();
+    console.log("Selection time (ms):", Date.now() - c);
+    c = Date.now();
+    populationScores.value = crossover(selected);
+    console.log("Crossover time (ms):", Date.now() - c);
+    await sleep(200);
   }
 
   const select = () => {
     const selectedPopulation = [];
-    const sortedPopulation = [...population.value].sort(chromosomeComparator);
-    betterChromosome.value.score = evaluateChromosome(sortedPopulation[0]);
-    betterChromosome.value.sequence = sortedPopulation[0];
-    selectedPopulation.push(...sortedPopulation.slice(0, configuration.value.elitism_size));
+    const sortedPopulation = populationScores.value.sort(chromosomeScoreComparator);
+
+    for (let i = 0; i < configuration.value.elitism_size; i++) {
+      selectedPopulation.push(sortedPopulation[i]);
+    }
 
     while (selectedPopulation.length < configuration.value.selection_size) {
       const tournament = [];
       for (let i = 0; i < 5; i++) {
-        tournament.push(sortedPopulation[randInt(0, configuration.value.population_size - 1)]);
+        const { chromosome, score } = sortedPopulation[randInt(0, configuration.value.population_size - 1)];
+        tournament.push({chromosome, score});
       }
 
-      selectedPopulation.push(tournament.sort(chromosomeComparator)[0]);
+      selectedPopulation.push(tournament.sort(chromosomeScoreComparator)[0]);
     }
 
+    populationScores.value = [];
     return selectedPopulation;
   }
 
   const crossover = (basePopulation) => {
-    const newPopulation = [];
-    const sortedPopulation = [...population.value].sort(chromosomeComparator);
-    newPopulation.push(...sortedPopulation.slice(0, configuration.value.elitism_size));
+    for (let i = 0; i < configuration.value.elitism_size; i++) {
+      populationScores.value.push(basePopulation[i]);
+    }
 
-    const parentA = basePopulation[0];
-    const parentB = basePopulation[1];
+    const parentA = basePopulation[0].chromosome;
+    const parentB = basePopulation[1].chromosome;
 
-    while (newPopulation.length < configuration.value.population_size) {
-      const parentC = basePopulation[randInt(0, configuration.value.selection_size - 1)];
-      const parentD = basePopulation[randInt(0, configuration.value.selection_size - 1)];
+    while (populationScores.value.length < configuration.value.population_size) {
+      const parentC = basePopulation[randInt(0, configuration.value.selection_size - 1)].chromosome;
+      const parentD = basePopulation[randInt(0, configuration.value.selection_size - 1)].chromosome;
 
       const crossoverFunction = {
         "MATE": mate,
@@ -97,10 +98,14 @@ const useGeneticLander = (surfaceMap) => {
       const [child1, child2] = crossoverFunction[configuration.value.strategy](parentA, parentB);
       const [child3, child4] = crossoverFunction[configuration.value.strategy](parentC, parentD);
 
-      newPopulation.push(child1, child2, child3, child4);
+      populationScores.value.push(
+        {chromosome: child1, score: evaluateChromosome(child1)},
+        {chromosome: child2, score: evaluateChromosome(child2)},
+        {chromosome: child3, score: evaluateChromosome(child3)},
+        {chromosome: child4, score: evaluateChromosome(child4)},
+      );
     }
-
-    return newPopulation;
+    return populationScores.value;
   }
 
   const mate = (parentA, parentB) => {
@@ -199,6 +204,15 @@ const useGeneticLander = (surfaceMap) => {
     return 0;
   }
 
+  const chromosomeScoreComparator = (chA, chB) => {
+    const evaluationA = chA.score;
+    const evaluationB = chB.score;
+
+    if (evaluationA < evaluationB) return -1;
+    if (evaluationA > evaluationB) return 1;
+    return 0;
+  }
+
   const resetConfig = () => {
     for (let i = 0; i < Object.keys(defaultConfiguration).length; i++) {
       const key = Object.keys(defaultConfiguration)[i];
@@ -213,16 +227,17 @@ const useGeneticLander = (surfaceMap) => {
   return {
     initialLander,
     status,
+    currentStatus,
     state,
     configuration,
-    population,
+    populationScores,
     currentGeneration,
-    betterChromosome,
     init,
     improve,
     setUp,
     evaluateChromosome,
     chromosomeComparator,
+    chromosomeScoreComparator,
     resetConfig,
   };
 }

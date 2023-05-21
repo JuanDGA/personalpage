@@ -53,11 +53,12 @@ const useSimulation = (initialLander, surface) => {
 
     const {x, y, vx, vy, angle} = state.value;
 
-    const inTerrain = surface.getIntersections(lastState.x, lastState.y, x, y) !== 0;
+    const inTerrain = surface.getIntersections(0, 3000, x, y) % 2 !== 0 || surface.getIntersections(lastState.x, lastState.y, x, y) !== 0;
 
     if (x < 0 || x > 6999 || y > 2999) status.value = SimulationStatus.LOST;
     else if (!inTerrain) status.value = SimulationStatus.FLYING;
-    else if (x < landing.x - 250 || x > landing.x + 250) status.value = SimulationStatus.CRASH;
+    else if (x < landing.x - 475 || x > landing.x + 475) status.value = SimulationStatus.CRASH;
+    else if (y < landing.y - 20 || y > landing.y + 20) status.value = SimulationStatus.CRASH;
     else if (angle !== 0 || Math.abs(vx) > 20 || Math.abs(vy) > 40) status.value = SimulationStatus.LANDING_CRASH;
     else status.value = SimulationStatus.LANDING;
   }

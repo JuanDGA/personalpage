@@ -4,6 +4,7 @@
   import { SurfaceMap } from "@/algorithms/marsLander/useSurfaceMap";
   import { Position, randInt, toRadians } from "@/algorithms/marsLander/utils";
   import useSimulation, { SimulationStatus } from "@/algorithms/marsLander/useSimulation";
+  import JgButton from "@/components/JgButton.vue";
 
   const width = window.innerWidth * 0.7;
   const height = window.innerHeight * 0.7;
@@ -15,23 +16,50 @@
 
   const surface = new SurfaceMap();
 
-  const {population, init, improve, setUp: setUpLander, initialLander, chromosomeComparator, resetConfig, configuration, state, currentGeneration, betterChromosome} = useGeneticLander(surface);
+  const {populationScores, init, improve, setUp: setUpLander, initialLander, chromosomeScoreComparator, resetConfig, configuration, state, currentGeneration} = useGeneticLander(surface);
 
   const board = ref();
+  const run = ref(false);
+  const betterChromosome = ref(Infinity);
 
   const getCtx = () => {
     return board.value.getContext("2d");
   }
 
+  const create = () => {
+    const start = Date.now();
+    init();
+    console.log(Date.now() - start);
+  }
+
+  const train = async () => {
+    while (betterChromosome.value >= 10000 && run.value) {
+      if (!run.value) break;
+      await improve();
+    }
+  }
+
   const initSurface = () => {
     surface.reset();
     surface.addSurfacePoint(new Position(0, 0));
-    surface.addSurfacePoint(new Position(0, 100));
-    surface.addSurfacePoint(new Position(1000, 1500));
-    surface.addSurfacePoint(new Position(3000, 1000));
-    surface.addSurfacePoint(new Position(4000, 150));
-    surface.addSurfacePoint(new Position(5500, 150));
-    surface.addSurfacePoint(new Position(6999, 800));
+    surface.addSurfacePoint(new Position(0, 1800));
+    surface.addSurfacePoint(new Position(300, 1200));
+    surface.addSurfacePoint(new Position(1000, 1550));
+    surface.addSurfacePoint(new Position(2000, 1200));
+    surface.addSurfacePoint(new Position(2500, 1650));
+    surface.addSurfacePoint(new Position(3700, 220));
+    surface.addSurfacePoint(new Position(4700, 220));
+    surface.addSurfacePoint(new Position(4750, 1000));
+    surface.addSurfacePoint(new Position(4700, 1650));
+    surface.addSurfacePoint(new Position(4000, 1700));
+    surface.addSurfacePoint(new Position(3700, 1600));
+    surface.addSurfacePoint(new Position(3750, 1900));
+    surface.addSurfacePoint(new Position(4000, 2100));
+    surface.addSurfacePoint(new Position(4900, 2050));
+    surface.addSurfacePoint(new Position(5100, 1000));
+    surface.addSurfacePoint(new Position(5500, 500));
+    surface.addSurfacePoint(new Position(6200, 800));
+    surface.addSurfacePoint(new Position(6999, 600));
     surface.addSurfacePoint(new Position(6999, 0));
   }
 
@@ -121,14 +149,13 @@
 
   const paintPopulation = (pop, {clear, color} = {clear: true, color: "#f4d03f"}) => {
     if (clear) setUp(false, false);
-    getCtx().font = "30px Arial";
-    getCtx().fillText(`Generation: ${currentGeneration.value}`, 10, 50);
-    getCtx().fillText(`Better sequence:`, 10, 100);
-    getCtx().fillText(`\t\tLength: ${betterChromosome.value.sequence.length}`, 10, 150);
-    getCtx().fillText(`\t\tScore: ${betterChromosome.value.score}`, 10, 200);
     const {nextState, getPosition, reset, status} = useSimulation(initialLander, surface);
+
     getCtx().strokeStyle = color;
-    for (let solution of pop) {
+    for (let solutionWithScore of pop) {
+      const solution = solutionWithScore.chromosome;
+      if (solutionWithScore.score < betterChromosome.value) betterChromosome.value = solutionWithScore.score;
+
       getCtx().beginPath();
       getCtx().moveTo(getRelativeX(initialLander.value.x), getRelativeY(initialLander.value.y));
       for (let action of solution) {
@@ -137,11 +164,16 @@
         getCtx().lineTo(getRelativeX(pos.x), getRelativeY(pos.y));
         if (SimulationStatus.isFinish(status.value)) break;
       }
-      getCtx().closePath();
       getCtx().stroke();
+      getCtx().closePath();
       reset();
     }
     paintLander();
+
+    getCtx().font = "30px Arial";
+    getCtx().fillText(`Generation: ${currentGeneration.value}`, 10, 50);
+    getCtx().fillText(`Better sequence:`, 10, 100);
+    getCtx().fillText(`\t\tScore: ${betterChromosome.value}`, 10, 150);
   }
 
   const setUp = (initialize = false, initLander = true) => {
@@ -153,7 +185,7 @@
     paintSky(initialize);
     paintMap(initialize);
     if (initLander) {
-      setUpLander(2500, 2700, 0, 0, 0, 0, 550);
+      setUpLander(6500, 2000, 0, 0, 0, 0, 1200);
     }
   }
 
@@ -161,8 +193,8 @@
     setUp(true, true);
   });
 
-  watch(population, (value) => {
-    const sortedPopulation = [...value].sort(chromosomeComparator);
+  watch(populationScores, (value) => {
+    const sortedPopulation = value.sort(chromosomeScoreComparator);
     paintPopulation(sortedPopulation.slice(10, sortedPopulation.length));
     paintPopulation(sortedPopulation.slice(0, 10), {clear: false, color: "#2ecc71"});
   });
@@ -170,13 +202,18 @@
   watch(state, () => {
     paintLander();
   }, {deep: true});
+
+  watch(run, (value) => {
+    if (!value) return;
+    train();
+  });
 </script>
 
 <template>
   <div class="container">
     <h2 class="center">This page is optimized for desktop</h2>
-    <button @click="init">Create first population</button>
-    <button v-if="population.length > 0" @click="improve">Find solution</button>
+    <jg-button @click="create">Create first population</jg-button>
+    <jg-button v-if="populationScores.length > 0" @click="run = !run">Find solution</jg-button>
     <div>
       <div>Current population: {{configuration.population_size}}</div>
       <input type="range" min="10" max="100" v-model="configuration.population_size">
@@ -200,7 +237,7 @@
     <div>
       <div>Strategy: {{configuration.strategy}}</div>
     </div>
-    <button @click="resetConfig">Reset config</button>
+    <jg-button @click="resetConfig">Reset config</jg-button>
     <div class="centered">
       <canvas ref="board" :width="width" :height="height" />
     </div>
@@ -234,5 +271,4 @@
       font-weight: bold;
       transition: 300ms;
   }
-
 </style>
