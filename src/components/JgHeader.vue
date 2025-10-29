@@ -1,5 +1,5 @@
 <script setup>
-  import profile from "@/assets/profile.jpg";
+  import profile from "@/assets/profile.webp";
   import JgAutoWriter from "@/components/JgAutoWriter.vue";
 </script>
 
