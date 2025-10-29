@@ -10,7 +10,7 @@
       bg: "#f0f0f0",
       href: "https://www.linkedin.com/in/jguevaradev/",
     },
-    { name: "Mail", img: mail, bg: "#f0f0f0", href: "mailto:contact@jguevara.dev" },
+    { name: "Mail", img: mail, bg: "#f0f0f0", href: "mailto:david@jguevara.dev" },
   ];
 </script>
 
