@@ -1,5 +1,5 @@
 <script setup>
-  import profile from "@/assets/profile.jpg";
+  import profile from "@/assets/profile.webp";
   import JgAutoWriter from "@/components/JgAutoWriter.vue";
 </script>
 
@@ -31,6 +31,6 @@
     -webkit-background-clip: text !important;
     -webkit-text-fill-color: transparent !important;
     background-clip: text !important;
-    background: linear-gradient(90deg, #58D68D, #3FB984);
+    background: linear-gradient(90deg, #58d68d, #3fb984);
   }
 </style>

@@ -39,15 +39,47 @@
       <a target="_blank" href="https://scheduler.neoventix.com/">NeoScheduler,</a> a product of
       <a target="_blank" href="https://neoventix.com/">Neoventix.</a>
     </div>
+    <div>
+      <h1 class="center">Preview projects</h1>
+    </div>
+    <div>
+      <h2>Mars Lander:</h2>
+      <p class="codingame">
+        I recently took on the Mars Lander challenge on the <a href="https://www.codingame.com/training/expert/mars-lander-episode-3" target="_blank">Codingame</a> platform. I originally wrote my solution in Kotlin, but I've also adapted it to JavaScript. Check it out:
+        <router-link to="/preview/mars-lander">
+          <template #default>
+            <span class="mars">Mars Lander</span>
+          </template>
+        </router-link>
+      </p>
+    </div>
   </div>
 </template>
 
 <style scoped>
+  .center {
+    text-align: center;
+  }
+
   .container {
     max-width: 90vw;
     width: 750px;
     margin: 20px auto;
     font-size: 1.3em;
+  }
+
+  .codingame a {
+      -webkit-background-clip: text !important;
+      -webkit-text-fill-color: transparent !important;
+      background-clip: text !important;
+      background: linear-gradient(90deg, #F2BB13, #F7B003);
+  }
+
+  .codingame .mars {
+      -webkit-background-clip: text !important;
+      -webkit-text-fill-color: transparent !important;
+      background-clip: text !important;
+      background: linear-gradient(90deg, #e74c3c, #f5b041);
   }
 
   .container .projects-lst {
@@ -83,6 +115,3 @@
     font-size: 1.1em;
   }
 </style>
-<script setup>
-import JgMarsLander from "@/components/JgMarsLander.vue";
-</script>
