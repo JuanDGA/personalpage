@@ -5,22 +5,15 @@ import useLander from "@/algorithms/marsLander/useLander";
 
 const defaultConfiguration = {
   population_size: 60,
-  chromosome_size: 100,
-  selection_size: 20,
-  elitism_size: 4,
-  strategy: "MATE",
-  mutation_probability: 0.1,
+  chromosome_size: 30,
+  selection_size: 10,
+  elitism_size: 2,
+  strategy: "MIX",
+  mutation_probability: 0.2,
 }
 
 const useGeneticLander = (surfaceMap) => {
-  const configuration = ref({
-    population_size: 60,
-    chromosome_size: 100,
-    selection_size: 20,
-    elitism_size: 4,
-    strategy: "MATE",
-    mutation_probability: 0.1,
-  });
+  const configuration = ref({...defaultConfiguration});
 
   const status = ref("");
 
@@ -37,9 +30,10 @@ const useGeneticLander = (surfaceMap) => {
     const newPopulationScores = [];
     for (let i = 0; i < configuration.value.population_size; i++) {
       const chromosome = []
-      for (let j = 0; j < configuration.value.chromosome_size; j++) {
+      for (let j = 0; j < configuration.value.chromosome_size - 1; j++) {
         chromosome.push(Gene.random());
       }
+      chromosome.push(new Gene(0, 0, 100));
       newPopulationScores.push({chromosome, score: evaluateChromosome(chromosome)});
     }
     populationScores.value = newPopulationScores;
@@ -115,14 +109,16 @@ const useGeneticLander = (surfaceMap) => {
     for (let i = 0; i < configuration.value.chromosome_size; i++) {
       const r = Math.random();
 
-      const pA = r * parentA[i].power + (1 - r) * parentB[i].power;
-      const dA = r * parentA[i].angle + (1 - r) * parentB[i].angle;
+      const powerA = r * parentA[i].power + (1 - r) * parentB[i].power;
+      const angleA = r * parentA[i].angle + (1 - r) * parentB[i].angle;
+      const distanceA = r * parentA[i].duration + (1 - r) * parentB[i].duration;
 
-      const pB = (1 - r) * parentA[i].power + r * parentB[i].power;
-      const dB = (1 - r) * parentA[i].angle + r * parentB[i].angle;
+      const powerB = (1 - r) * parentA[i].power + r * parentB[i].power;
+      const angleB = (1 - r) * parentA[i].angle + r * parentB[i].angle;
+      const distanceB = (1 - r) * parentA[i].duration + r * parentB[i].duration;
 
-      const geneA = new Gene(Math.round(pA), Math.round(dA)).mutate(configuration.value.mutation_probability);
-      const geneB = new Gene(Math.round(pB), Math.round(dB)).mutate(configuration.value.mutation_probability);
+      const geneA = new Gene(Math.round(powerA), Math.round(angleA), Math.round(distanceA)).mutate(configuration.value.mutation_probability);
+      const geneB = new Gene(Math.round(powerB), Math.round(angleB), Math.round(distanceB)).mutate(configuration.value.mutation_probability);
 
       childA.push(geneA);
       childB.push(geneB);
@@ -135,16 +131,26 @@ const useGeneticLander = (surfaceMap) => {
     const childA = [];
     const childB = [];
 
-    const randomRange = randInt(0, configuration.value.chromosome_size);
+    let randomRange = randInt(0, configuration.value.chromosome_size - 2);
+    let randomRange2 = randInt(randomRange, configuration.value.chromosome_size);
+
+    if (randomRange == randomRange2) {
+      randomRange2 += 1;
+    }
 
     for (let i = 0; i < randomRange; i++) {
       childA.push(parentB[i].mutate(configuration.value.mutation_probability));
       childB.push(parentA[i].mutate(configuration.value.mutation_probability));
     }
 
-    for (let i = randomRange; i < configuration.value.chromosome_size; i++) {
+    for (let i = randomRange; i < randomRange2; i++) {
       childA.push(parentA[i].mutate(configuration.value.mutation_probability));
       childB.push(parentB[i].mutate(configuration.value.mutation_probability));
+    }
+
+    for (let i = randomRange2; i < configuration.value.chromosome_size; i++) {
+      childA.push(parentB[i].mutate(configuration.value.mutation_probability));
+      childB.push(parentA[i].mutate(configuration.value.mutation_probability));
     }
 
     return [childA, childB];

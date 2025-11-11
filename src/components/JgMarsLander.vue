@@ -159,9 +159,11 @@
       getCtx().beginPath();
       getCtx().moveTo(getRelativeX(initialLander.value.x), getRelativeY(initialLander.value.y));
       for (let action of solution) {
-        nextState(action);
-        const pos = getPosition();
-        getCtx().lineTo(getRelativeX(pos.x), getRelativeY(pos.y));
+        for (let i = 0; i < action.duration && !SimulationStatus.isFinish(status.value); i++) {
+          nextState(action);
+          const pos = getPosition();
+          getCtx().lineTo(getRelativeX(pos.x), getRelativeY(pos.y));
+        }
         if (SimulationStatus.isFinish(status.value)) break;
       }
       getCtx().stroke();

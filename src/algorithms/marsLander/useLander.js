@@ -23,8 +23,10 @@ const useLander = () => {
   }
 
   const advance = (gene) => {
-    let power = state.value.power + gene.power;
-    let angle = state.value.angle + gene.angle;
+    // let power = state.value.power + gene.power;
+    // let angle = state.value.angle + gene.angle;
+    let power = gene.power;
+    let angle = gene.angle;
 
     if (power < 0) power = 0;
     if (power > 4) power = 4;

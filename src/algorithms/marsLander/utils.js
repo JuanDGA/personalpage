@@ -79,23 +79,26 @@ export class Line {
 export class Gene {
   power = -1
   angle = -1
+  duration = -1
 
-  constructor(power, angle) {
+  constructor(power, angle, duration) {
     this.power = power
     this.angle = angle
+    this.duration = duration
   }
 
   static random() {
-    return new Gene(randInt(-1, 1), randInt(-15, 15));
+    return new Gene(randInt(0, 4), randInt(-90, 90), randInt(0, 30));
   }
 
   mutate(probability) {
     if (Math.random() < probability) {
-      const power = Math.round(this.power * randomGaussian());
-      const angle = Math.round(this.angle * randomGaussian());
+      const power = Math.max(0, Math.min(4, this.power + randInt(-2, 2)));
+      const angle = Math.max(-90, Math.min(90, this.power + randInt(-15, 15)));
+      const duration = Math.max(0, Math.min(30, this.duration + randInt(-10, 10)));
 
-      return new Gene(power, angle);
+      return new Gene(power, angle, duration);
     }
-    return this;
+    return new Gene(this.power, this.angle, this.duration);
   }
 }

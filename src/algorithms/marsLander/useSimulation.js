@@ -23,8 +23,10 @@ export const SimulationResult = (chromosome, map, lander) => {
   const initSimulation = () => {
     for (let gene of chromosome) {
       lastPosition.value = getPosition();
-      nextState(gene);
-      currentPosition.value = getPosition();
+      for (let i = 0; i < gene.duration && !SimulationStatus.isFinish(status.value); i++) {
+        nextState(gene);
+        currentPosition.value = getPosition();
+      }
       if (SimulationStatus.isFinish(status.value)) break;
     }
     return status.value;
