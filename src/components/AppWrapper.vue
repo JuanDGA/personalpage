@@ -12,7 +12,6 @@
 <template>
   <main>
     <div v-if="show">
-      <jg-button to="/" v-if="$route.path !== '/'" class="game-btn">Game</jg-button>
       <jg-header />
     </div>
     <nav>
@@ -24,21 +23,15 @@
     <div>
       <slot />
     </div>
-  </main>
+    </main>
 </template>
 
 <style scoped>
   nav {
-    margin: 10px 0;
+    margin: var(--space-sm) 0;
     display: flex;
     justify-content: center;
-    gap: 10px;
+    gap: var(--space-sm);
   }
 
-  .game-btn {
-    margin: 10px 15px;
-    position: absolute;
-    top: 0;
-    left: 0;
-  }
 </style>

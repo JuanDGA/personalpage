@@ -8,32 +8,45 @@
 </script>
 
 <template>
-  <router-link v-if="to !== 'none'" :to="to">
-    <template #default>
-      <button class="link"><slot /></button>
-    </template>
+  <router-link v-if="to !== 'none'" :to="to" custom v-slot="{ isActive, navigate }">
+    <button
+      class="link"
+      :class="{ 'link--active': isActive }"
+      @click="navigate"
+    >
+      <slot />
+    </button>
   </router-link>
   <button v-else class="link"><slot /></button>
 </template>
 
 <style scoped>
   .link {
-    border-radius: 0;
     border: none;
-    box-shadow: none;
-    padding: 3px 0;
-    width: 130px;
+    border-bottom: 3px solid var(--color-accent);
+    border-radius: var(--radius-sm);
+    background-color: transparent;
+    color: var(--color-text);
     cursor: pointer;
-    font-size: 1.5em;
-    border-bottom: 5px solid #58d68d;
-    background-color: #fff0;
-    color: white;
-    transition: 300ms;
+    font-family: var(--font-mono);
+    font-size: 1.1rem;
+    padding: var(--space-xs) var(--space-sm);
+    min-width: 120px;
+    transition: all var(--transition-default);
   }
 
   .link:hover {
-    padding: 3px 0;
-    width: 135px;
-    border-bottom: 7px solid #58d68d;
+    background-color: var(--color-accent-glow);
+    border-bottom-color: var(--color-accent);
+    transform: translateY(-1px);
+  }
+
+  .link:active {
+    transform: translateY(0);
+  }
+
+  .link--active {
+    color: var(--color-accent);
+    border-bottom-width: 4px;
   }
 </style>

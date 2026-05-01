@@ -1,57 +1,110 @@
 <script setup>
-  import { onMounted, ref } from "vue";
+  import { onMounted, onUnmounted, ref } from "vue";
 
   const props = defineProps({
-    text: {
-      type: String,
-      required: true,
+    texts: {
+      type: Array,
+      default: () => [],
+    },
+    speed: {
+      type: Number,
+      default: 80,
+    },
+    deleteSpeed: {
+      type: Number,
+      default: 50,
+    },
+    pauseDuration: {
+      type: Number,
+      default: 2000,
     },
   });
 
   const currentText = ref("");
+  const isTyping = ref(true);
+  const isDeleting = ref(false);
+  const wordIndex = ref(0);
+  let timeoutId = null;
 
-  const sleep = async (ms) => await new Promise((resolve) => setTimeout(resolve, ms));
+  const prefersReducedMotion = () =>
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  const startWriting = async () => {
-    await awaitForText(3200);
-    for (let i of props.text) {
-      await sleep(100);
-      currentText.value += i;
+  const type = () => {
+    const fullText = props.texts[wordIndex.value % props.texts.length];
+
+    if (prefersReducedMotion()) {
+      currentText.value = fullText;
+      return;
     }
-    await awaitForText(5000);
-    deleteWritten();
-  };
 
-  const deleteWritten = async () => {
-    while (currentText.value.length > 0) {
-      await sleep(100);
-      currentText.value = currentText.value.slice(0, currentText.value.length - 1);
-    }
-    startWriting();
-  };
-
-  const awaitForText = async (ms) => {
-    let finished = false;
-    setTimeout(() => (finished = true), ms);
-    let added = false;
-    while (!finished) {
-      await sleep(400);
-      if (!added) {
-        currentText.value += "|";
-        added = true;
+    if (isTyping.value) {
+      if (currentText.value.length < fullText.length) {
+        currentText.value = fullText.slice(0, currentText.value.length + 1);
+        timeoutId = setTimeout(type, props.speed);
       } else {
-        currentText.value = currentText.value.slice(0, currentText.value.length - 1);
-        added = false;
+        isTyping.value = false;
+        timeoutId = setTimeout(() => {
+          isDeleting.value = true;
+          type();
+        }, props.pauseDuration);
+      }
+    } else if (isDeleting.value) {
+      if (currentText.value.length > 0) {
+        currentText.value = currentText.value.slice(0, -1);
+        timeoutId = setTimeout(type, props.deleteSpeed);
+      } else {
+        isDeleting.value = false;
+        isTyping.value = true;
+        wordIndex.value = (wordIndex.value + 1) % props.texts.length;
+        timeoutId = setTimeout(type, props.speed);
       }
     }
-    if (added) currentText.value = currentText.value.slice(0, currentText.value.length - 1);
   };
 
   onMounted(() => {
-    startWriting();
+    type();
+  });
+
+  onUnmounted(() => {
+    if (timeoutId) clearTimeout(timeoutId);
   });
 </script>
 
 <template>
-  <h2 style="min-height: 32px">{{ currentText }}</h2>
+  <h2 class="autowriter">
+    <span class="autowriter__text">{{ currentText }}</span>
+    <span class="autowriter__cursor" aria-hidden="true"></span>
+  </h2>
 </template>
+
+<style scoped>
+  .autowriter {
+    min-height: 2rem;
+    font-family: var(--font-mono);
+    font-size: 1.2rem;
+    font-weight: 400;
+    color: var(--color-text-muted);
+  }
+
+  .autowriter__cursor {
+    display: inline-block;
+    width: 2px;
+    height: 1.2em;
+    background-color: var(--color-accent);
+    margin-left: 2px;
+    vertical-align: text-bottom;
+    animation: blink 1s step-end infinite;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .autowriter__cursor {
+      animation: none;
+      opacity: 1;
+    }
+  }
+</style>

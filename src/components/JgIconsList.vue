@@ -24,17 +24,28 @@
 <style scoped>
   .icons {
     display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-sm);
   }
 
   .logo {
-    background: #181818;
-    padding: 5px;
-    border-radius: 5px;
-    margin: 10px 10px;
+    background: var(--color-bg-surface);
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--radius-md);
+    margin: var(--space-xs);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    border: 1px solid var(--color-border);
+    transition: all var(--transition-default);
+  }
+
+  .logo:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+    border-color: var(--color-border-hover);
   }
 
   .icon-container {
@@ -49,24 +60,25 @@
     -webkit-text-fill-color: transparent !important;
     background-clip: text !important;
     font-weight: bold;
-    font-size: 1.5rem;
+    font-size: 1.3rem;
   }
 
   .skill-level {
+    font-family: var(--font-mono);
     font-style: italic;
-    color: #888888;
-    font-size: 0.9em;
+    color: var(--color-text-dim);
+    font-size: 0.75rem;
   }
 
   .icon {
-    margin: 5px;
-    transition: 300ms;
-    height: 70px;
-    object-fit: cover;
+    margin: var(--space-xs);
+    transition: transform var(--transition-default);
+    height: 64px;
+    object-fit: contain;
   }
 
   .icon:hover {
-    transform: scale(105%);
+    transform: scale(1.08);
   }
 
   .link {

@@ -95,6 +95,9 @@
       <jg-icons-list :items="languages" />
     </div>
   </div>
+  <footer class="site-footer">
+    <span class="footer-note">Not a frontend engineer by trade — this site was hand-built and polished with a little AI help.</span>
+  </footer>
 </template>
 
 <style scoped>
@@ -113,7 +116,21 @@
   }
 
   .title {
-    color: #58d68d;
+    color: var(--color-accent);
     font-size: 1.3rem;
+  }
+
+  .site-footer {
+    margin-top: var(--space-xl);
+    padding: var(--space-lg) var(--space-md);
+    text-align: center;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .footer-note {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--color-text-dim);
+    letter-spacing: 0.02em;
   }
 </style>
