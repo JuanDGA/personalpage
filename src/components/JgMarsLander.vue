@@ -1,5 +1,5 @@
 <script setup>
-  import { onMounted, ref, watch } from "vue";
+  import { onMounted, onBeforeUnmount, ref, watch } from "vue";
   import useGeneticLander from "@/algorithms/marsLander/useGeneticLander";
   import { SurfaceMap } from "@/algorithms/marsLander/useSurfaceMap";
   import { Position, randInt, toRadians } from "@/algorithms/marsLander/utils";
@@ -10,13 +10,24 @@
   const height = window.innerHeight * 0.7;
 
   const getRelativeX = (x) => (x * width) / 7000;
-  const getRelativeY = (y) => height - ((y * height) / 3000);
+  const getRelativeY = (y) => height - (y * height) / 3000;
 
   const sky = ref([]);
 
   const surface = new SurfaceMap();
 
-  const {populationScores, init, improve, setUp: setUpLander, initialLander, chromosomeScoreComparator, resetConfig, configuration, state, currentGeneration} = useGeneticLander(surface);
+  const {
+    populationScores,
+    init,
+    improve,
+    setUp: setUpLander,
+    initialLander,
+    chromosomeScoreComparator,
+    resetConfig,
+    configuration,
+    state,
+    currentGeneration,
+  } = useGeneticLander(surface);
 
   const board = ref();
   const run = ref(false);
@@ -24,20 +35,20 @@
 
   const getCtx = () => {
     return board.value.getContext("2d");
-  }
+  };
 
   const create = () => {
     const start = Date.now();
     init();
     console.log(Date.now() - start);
-  }
+  };
 
   const train = async () => {
     while (betterChromosome.value >= 10000 && run.value) {
       if (!run.value) break;
       await improve();
     }
-  }
+  };
 
   const initSurface = () => {
     surface.reset();
@@ -61,7 +72,7 @@
     surface.addSurfacePoint(new Position(6200, 800));
     surface.addSurfacePoint(new Position(6999, 600));
     surface.addSurfacePoint(new Position(6999, 0));
-  }
+  };
 
   const paintSky = (initialize = false) => {
     if (initialize) sky.value = [];
@@ -91,8 +102,8 @@
 
     getCtx().arc(earthPos.x, earthPos.y, 2, 0, 2 * Math.PI);
     getCtx().closePath();
-    getCtx().fill()
-  }
+    getCtx().fill();
+  };
 
   const paintMap = (initialize = false) => {
     if (initialize) initSurface();
@@ -107,7 +118,7 @@
 
     getCtx().closePath();
     getCtx().fill();
-  }
+  };
 
   const paintLander = () => {
     const origin = new Position(getRelativeX(state.value.x), getRelativeY(state.value.y));
@@ -133,7 +144,7 @@
     getCtx().fillStyle = flameColor1;
     getCtx().beginPath();
     getCtx().moveTo(origin.x - 3, origin.y);
-    getCtx().lineTo(origin.x, origin.y + ((30 * state.value.power) / 4));
+    getCtx().lineTo(origin.x, origin.y + (30 * state.value.power) / 4);
     getCtx().lineTo(origin.x + 3, origin.y);
     getCtx().closePath();
     getCtx().fill();
@@ -141,20 +152,21 @@
     getCtx().fillStyle = flameColor2;
     getCtx().beginPath();
     getCtx().moveTo(origin.x - 2, origin.y);
-    getCtx().lineTo(origin.x, origin.y + ((10 * state.value.power) / 4));
+    getCtx().lineTo(origin.x, origin.y + (10 * state.value.power) / 4);
     getCtx().lineTo(origin.x + 2, origin.y);
     getCtx().closePath();
     getCtx().fill();
-  }
+  };
 
-  const paintPopulation = (pop, {clear, color} = {clear: true, color: "#f4d03f"}) => {
+  const paintPopulation = (pop, { clear, color } = { clear: true, color: "#f4d03f" }) => {
     if (clear) setUp(false, false);
-    const {nextState, getPosition, reset, status} = useSimulation(initialLander, surface);
+    const { nextState, getPosition, reset, status } = useSimulation(initialLander, surface);
 
     getCtx().strokeStyle = color;
     for (let solutionWithScore of pop) {
       const solution = solutionWithScore.chromosome;
-      if (solutionWithScore.score < betterChromosome.value) betterChromosome.value = solutionWithScore.score;
+      if (solutionWithScore.score < betterChromosome.value)
+        betterChromosome.value = solutionWithScore.score;
 
       getCtx().beginPath();
       getCtx().moveTo(getRelativeX(initialLander.value.x), getRelativeY(initialLander.value.y));
@@ -174,12 +186,12 @@
     getCtx().fillText(`Generation: ${currentGeneration.value}`, 10, 50);
     getCtx().fillText(`Better sequence:`, 10, 100);
     getCtx().fillText(`\t\tScore: ${betterChromosome.value}`, 10, 150);
-  }
+  };
 
   const setUp = (initialize = false, initLander = true) => {
     const gradient = getCtx().createLinearGradient(0, height, 0, 0);
-    gradient.addColorStop(0, "#ff8181")
-    gradient.addColorStop(1, "#ed8aff")
+    gradient.addColorStop(0, "#ff8181");
+    gradient.addColorStop(1, "#ed8aff");
     getCtx().fillStyle = gradient;
     getCtx().fillRect(0, 0, width, height);
     paintSky(initialize);
@@ -187,21 +199,29 @@
     if (initLander) {
       setUpLander(6500, 2000, 0, 0, 0, 0, 1200);
     }
-  }
+  };
 
   onMounted(() => {
     setUp(true, true);
   });
 
+  onBeforeUnmount(() => {
+    run.value = false;
+  });
+
   watch(populationScores, (value) => {
     const sortedPopulation = value.sort(chromosomeScoreComparator);
     paintPopulation(sortedPopulation.slice(10, sortedPopulation.length));
-    paintPopulation(sortedPopulation.slice(0, 10), {clear: false, color: "#2ecc71"});
+    paintPopulation(sortedPopulation.slice(0, 10), { clear: false, color: "#2ecc71" });
   });
 
-  watch(state, () => {
-    paintLander();
-  }, {deep: true});
+  watch(
+    state,
+    () => {
+      paintLander();
+    },
+    { deep: true },
+  );
 
   watch(run, (value) => {
     if (!value) return;
@@ -211,34 +231,94 @@
 
 <template>
   <div class="container">
-    <h2 class="center">This page is optimized for desktop</h2>
-    <jg-button @click="create">Create first population</jg-button>
-    <jg-button v-if="populationScores.length > 0" @click="run = !run">Find solution</jg-button>
-    <div>
-      <div>Current population: {{configuration.population_size}}</div>
-      <input type="range" min="10" max="100" v-model="configuration.population_size">
-      <input type="number" min="10" max="100" v-model="configuration.population_size">
+    <header class="header">
+      <h1 class="title">Mars Lander</h1>
+      <p class="subtitle">Genetic Algorithm Simulation</p>
+    </header>
+
+    <div class="controls">
+      <div class="actions">
+        <jg-button @click="create">Create first population</jg-button>
+        <jg-button v-if="populationScores.length > 0" @click="run = !run">
+          {{ run ? "Pause" : "Find solution" }}
+        </jg-button>
+        <jg-button @click="resetConfig">Reset config</jg-button>
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          <span class="stat__label">Generation</span>
+          <span class="stat__value">{{ currentGeneration }}</span>
+        </div>
+        <div class="stat">
+          <span class="stat__label">Best Score</span>
+          <span class="stat__value">{{
+            betterChromosome === Infinity ? "—" : betterChromosome
+          }}</span>
+        </div>
+        <div class="stat">
+          <span class="stat__label">Population</span>
+          <span class="stat__value">{{ configuration.population_size }}</span>
+        </div>
+      </div>
+
+      <div class="sliders">
+        <div class="slider-group">
+          <label>Population size</label>
+          <div class="slider-row">
+            <input type="range" min="10" max="100" v-model="configuration.population_size" />
+            <input type="number" min="10" max="100" v-model="configuration.population_size" />
+          </div>
+        </div>
+        <div class="slider-group">
+          <label>Chromosome size</label>
+          <div class="slider-row">
+            <input type="range" min="0" max="200" v-model="configuration.chromosome_size" />
+            <input type="number" min="0" max="200" v-model="configuration.chromosome_size" />
+          </div>
+        </div>
+        <div class="slider-group">
+          <label>Elitism size</label>
+          <div class="slider-row">
+            <input
+              type="range"
+              min="0"
+              :max="configuration.population_size"
+              v-model="configuration.elitism_size"
+            />
+            <input
+              type="number"
+              min="0"
+              :max="configuration.population_size"
+              v-model="configuration.elitism_size"
+            />
+          </div>
+        </div>
+        <div class="slider-group">
+          <label>Selection size</label>
+          <div class="slider-row">
+            <input
+              type="range"
+              min="4"
+              :max="configuration.population_size"
+              v-model="configuration.selection_size"
+            />
+            <input
+              type="number"
+              min="4"
+              :max="configuration.population_size"
+              v-model="configuration.selection_size"
+            />
+          </div>
+        </div>
+        <div class="strategy">
+          <span class="strategy__label">Strategy</span>
+          <span class="strategy__value">{{ configuration.strategy }}</span>
+        </div>
+      </div>
     </div>
-    <div>
-      <div>Current chromosome size: {{configuration.chromosome_size}}</div>
-      <input type="range" min="0" max="200" v-model="configuration.chromosome_size">
-      <input type="number" min="0" max="200" v-model="configuration.chromosome_size">
-    </div>
-    <div>
-      <div>Current elitism size: {{configuration.elitism_size}}</div>
-      <input type="range" min="0" :max="configuration.population_size" v-model="configuration.elitism_size">
-      <input type="number" min="0" :max="configuration.population_size" v-model="configuration.elitism_size">
-    </div>
-    <div>
-      <div>Current selection size: {{configuration.selection_size}}</div>
-      <input type="range" min="4" :max="configuration.population_size" v-model="configuration.selection_size">
-      <input type="number" min="4" :max="configuration.population_size" v-model="configuration.selection_size">
-    </div>
-    <div>
-      <div>Strategy: {{configuration.strategy}}</div>
-    </div>
-    <jg-button @click="resetConfig">Reset config</jg-button>
-    <div class="centered">
+
+    <div class="canvas-wrapper">
       <canvas ref="board" :width="width" :height="height" />
     </div>
   </div>
@@ -247,28 +327,169 @@
 <style scoped>
   .container {
     max-width: 90vw;
-    width: 750px;
-    margin: 20px auto;
-    font-size: 1.3em;
+    width: 850px;
+    margin: var(--space-lg) auto;
   }
 
-  .centered {
-      display: flex;
-      justify-content: center;
+  .header {
+    text-align: center;
+    margin-bottom: var(--space-lg);
   }
 
-  .center {
-      text-align: center;
+  .title {
+    font-family: var(--font-mono);
+    font-size: 1.8rem;
+    color: var(--color-accent);
+    margin-bottom: var(--space-xs);
   }
 
-  p {
-      margin: 10px auto;
+  .subtitle {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    color: var(--color-text-dim);
   }
 
-  a {
-      text-decoration: none;
-      color: #58d68d;
-      font-weight: bold;
-      transition: 300ms;
+  .controls {
+    background: var(--color-bg-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    margin-bottom: var(--space-lg);
+  }
+
+  .actions {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-lg);
+    flex-wrap: wrap;
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-md);
+    margin-bottom: var(--space-lg);
+  }
+
+  .stat {
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-sm) var(--space-md);
+    text-align: center;
+  }
+
+  .stat__label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--color-text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: var(--space-xs);
+  }
+
+  .stat__value {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 1.1rem;
+    color: var(--color-accent);
+    font-weight: 700;
+  }
+
+  .sliders {
+    display: grid;
+    gap: var(--space-md);
+  }
+
+  .slider-group label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-xs);
+  }
+
+  .slider-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+  }
+
+  .slider-row input[type="range"] {
+    flex: 1;
+    accent-color: var(--color-accent);
+    background: var(--color-bg);
+    border-radius: var(--radius-full);
+  }
+
+  .slider-row input[type="number"] {
+    width: 70px;
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    color: var(--color-text);
+    font-family: var(--font-mono);
+    padding: var(--space-xs) var(--space-sm);
+    text-align: center;
+  }
+
+  .strategy {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  .strategy__label {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+  }
+
+  .strategy__value {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    color: var(--color-accent);
+    font-weight: 500;
+  }
+
+  .canvas-wrapper {
+    display: flex;
+    justify-content: center;
+    background: var(--color-bg-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-md);
+    overflow: auto;
+  }
+
+  canvas {
+    border-radius: var(--radius-sm);
+    max-width: 100%;
+  }
+
+  @media (max-width: 600px) {
+    .stats {
+      grid-template-columns: 1fr;
+    }
+
+    .actions {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .slider-row {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .slider-row input[type="number"] {
+      width: 100%;
+    }
   }
 </style>

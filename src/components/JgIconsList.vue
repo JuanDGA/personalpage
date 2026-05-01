@@ -7,6 +7,17 @@
       required: true,
     },
   });
+
+  const getDots = (level) => {
+    const map = {
+      Novice: 1,
+      Intermediate: 2,
+      Advanced: 3,
+      Expert: 4,
+      "Primary language": 4,
+    };
+    return map[level] || 0;
+  };
 </script>
 
 <template>
@@ -15,7 +26,14 @@
       <jg-link class="icon-container" :class="{ link: item.href }" :href="item.href">
         <img :src="item.img" :alt="item.name + ' logo'" class="icon" />
         <span :style="{ background: item.bg }">{{ item.name }}</span>
-        <div class="skill-level">{{ item.level }}</div>
+        <div v-if="item.level" class="proficiency">
+          <div
+            v-for="dot in 4"
+            :key="dot"
+            class="proficiency__dot"
+            :class="{ 'proficiency__dot--filled': dot <= getDots(item.level) }"
+          />
+        </div>
       </jg-link>
     </div>
   </div>
@@ -63,13 +81,6 @@
     font-size: 1.3rem;
   }
 
-  .skill-level {
-    font-family: var(--font-mono);
-    font-style: italic;
-    color: var(--color-text-dim);
-    font-size: 0.75rem;
-  }
-
   .icon {
     margin: var(--space-xs);
     transition: transform var(--transition-default);
@@ -84,5 +95,23 @@
   .link {
     cursor: pointer;
     text-decoration: none;
+  }
+
+  .proficiency {
+    display: flex;
+    gap: 3px;
+    margin-top: var(--space-xs);
+  }
+
+  .proficiency__dot {
+    width: 6px;
+    height: 6px;
+    border-radius: var(--radius-full);
+    background: var(--color-border);
+    transition: background var(--transition-fast);
+  }
+
+  .proficiency__dot--filled {
+    background: var(--color-accent);
   }
 </style>

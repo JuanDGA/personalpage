@@ -2,20 +2,21 @@ export const sleep = (millis) => new Promise((resolve) => setTimeout(() => resol
 
 export const randInt = (min, max) => {
   let diff = 0;
-  for (let i = min; i <= max; i++) diff += 1
+  for (let i = min; i <= max; i++) diff += 1;
   const r = Math.floor(Math.random() * diff);
   return min + r;
-}
+};
 
 export const randomGaussian = () => {
-  let u = 0, v = 0;
+  let u = 0,
+    v = 0;
   while (u === 0) u = Math.random();
   while (v === 0) v = Math.random();
   return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
-}
+};
 
-export const toRadians = (degrees) => degrees * Math.PI / 180;
-export const toDegrees = (radians) => radians * 180 / Math.PI;
+export const toRadians = (degrees) => (degrees * Math.PI) / 180;
+export const toDegrees = (radians) => (radians * 180) / Math.PI;
 export const pow = (x, a) => x ** a;
 export const hypot = (dx, dy) => Math.sqrt(pow(dx, 2) + pow(dy, 2));
 
@@ -24,8 +25,8 @@ export class Position {
   y;
 
   constructor(x, y) {
-    this.x = x
-    this.y = y
+    this.x = x;
+    this.y = y;
   }
 }
 
@@ -70,19 +71,25 @@ export class Line {
 
   intersects(line) {
     return this.linesIntersect(
-      line.a.x, line.a.y, line.b.x, line.b.y,
-      this.a.x, this.a.y, this.b.x, this.b.y,
+      line.a.x,
+      line.a.y,
+      line.b.x,
+      line.b.y,
+      this.a.x,
+      this.a.y,
+      this.b.x,
+      this.b.y,
     );
   }
 }
 
 export class Gene {
-  power = -1
-  angle = -1
+  power = -1;
+  angle = -1;
 
   constructor(power, angle) {
-    this.power = power
-    this.angle = angle
+    this.power = power;
+    this.angle = angle;
   }
 
   static random() {

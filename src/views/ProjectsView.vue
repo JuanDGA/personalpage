@@ -45,7 +45,12 @@
     <div>
       <h2>Mars Lander:</h2>
       <p class="codingame">
-        I recently took on the Mars Lander challenge on the <a href="https://www.codingame.com/training/expert/mars-lander-episode-3" target="_blank">Codingame</a> platform. I originally wrote my solution in Kotlin, but I've also adapted it to JavaScript. Check it out:
+        I recently took on the Mars Lander challenge on the
+        <a href="https://www.codingame.com/training/expert/mars-lander-episode-3" target="_blank"
+          >Codingame</a
+        >
+        platform. I originally wrote my solution in Kotlin, but I've also adapted it to JavaScript.
+        Check it out:
         <router-link to="/preview/mars-lander">
           <template #default>
             <span class="mars">Mars Lander</span>
@@ -69,17 +74,17 @@
   }
 
   .codingame a {
-      -webkit-background-clip: text !important;
-      -webkit-text-fill-color: transparent !important;
-      background-clip: text !important;
-      background: linear-gradient(90deg, #F2BB13, #F7B003);
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+    background: linear-gradient(90deg, #f2bb13, #f7b003);
   }
 
   .codingame .mars {
-      -webkit-background-clip: text !important;
-      -webkit-text-fill-color: transparent !important;
-      background-clip: text !important;
-      background: linear-gradient(90deg, #e74c3c, #f5b041);
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+    background: linear-gradient(90deg, #e74c3c, #f5b041);
   }
 
   .container .projects-lst {

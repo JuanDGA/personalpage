@@ -12,8 +12,8 @@
   --color-border-hover: rgba(88, 214, 141, 0.35);
   --color-neo: #16bbe5;
 
-  --font-body: 'Roboto', sans-serif;
-  --font-mono: 'Google Sans Code', monospace;
+  --font-body: "Roboto", sans-serif;
+  --font-mono: "Google Sans Code", monospace;
 
   --space-xs: 0.25rem;
   --space-sm: 0.5rem;

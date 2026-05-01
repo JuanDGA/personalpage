@@ -26,8 +26,7 @@
   const wordIndex = ref(0);
   let timeoutId = null;
 
-  const prefersReducedMotion = () =>
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const prefersReducedMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   const type = () => {
     const fullText = props.texts[wordIndex.value % props.texts.length];
@@ -97,8 +96,13 @@
   }
 
   @keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0; }
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {

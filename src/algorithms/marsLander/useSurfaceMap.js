@@ -47,6 +47,6 @@ export class SurfaceMap {
       if (edge.intersects(l1)) intersections += 1;
     }
 
-    return intersections
+    return intersections;
   }
 }

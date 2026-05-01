@@ -6,7 +6,7 @@
 
   const route = useRoute();
 
-  const show = computed(() => route.name ? !route.name.includes('preview') : false);
+  const show = computed(() => (route.name ? !route.name.includes("preview") : false));
 </script>
 
 <template>
@@ -23,7 +23,7 @@
     <div>
       <slot />
     </div>
-    </main>
+  </main>
 </template>
 
 <style scoped>
@@ -33,5 +33,4 @@
     justify-content: center;
     gap: var(--space-sm);
   }
-
 </style>

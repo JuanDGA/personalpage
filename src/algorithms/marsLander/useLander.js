@@ -20,7 +20,7 @@ const useLander = () => {
     state.value.angle = angle;
     state.value.power = power;
     state.value.fuel = fuel;
-  }
+  };
 
   const advance = (gene) => {
     let power = state.value.power + gene.power;
@@ -32,10 +32,10 @@ const useLander = () => {
     if (angle > 90) angle = 90;
 
     const aX = power * Math.cos(toRadians(angle + 90));
-    const aY = -3.711 + (power * Math.sin(toRadians(angle + 90)));
+    const aY = -3.711 + power * Math.sin(toRadians(angle + 90));
 
-    const newX = state.value.x + state.value.vx + (0.5 * aX);
-    const newY = state.value.y + state.value.vy + (0.5 * aY);
+    const newX = state.value.x + state.value.vx + 0.5 * aX;
+    const newY = state.value.y + state.value.vy + 0.5 * aY;
 
     const newVx = state.value.vx + aX;
     const newVy = state.value.vy + aY;
@@ -49,9 +49,9 @@ const useLander = () => {
     state.value.fuel = state.value.fuel - power;
     state.value.power = power;
     state.value.angle = angle;
-  }
+  };
 
-  return {state, setUp, advance}
-}
+  return { state, setUp, advance };
+};
 
 export default useLander;

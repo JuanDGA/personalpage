@@ -77,27 +77,32 @@
 </script>
 
 <template>
-  <div class="container">
-    <div class="row">
-      <h3 class="title">General skills</h3>
-      <jg-icons-list :items="generalSkills" />
+  <div>
+    <div class="container">
+      <div class="row">
+        <h3 class="title">General skills</h3>
+        <jg-icons-list :items="generalSkills" />
+      </div>
+      <div class="row">
+        <h3 class="title">Programming languages</h3>
+        <jg-icons-list :items="programmingLanguages" />
+      </div>
+      <div class="row">
+        <h3 class="title">Frameworks</h3>
+        <jg-icons-list :items="frameworks" />
+      </div>
+      <div class="row">
+        <h3 class="title">Languages</h3>
+        <jg-icons-list :items="languages" />
+      </div>
     </div>
-    <div class="row">
-      <h3 class="title">Programming languages</h3>
-      <jg-icons-list :items="programmingLanguages" />
-    </div>
-    <div class="row">
-      <h3 class="title">Frameworks</h3>
-      <jg-icons-list :items="frameworks" />
-    </div>
-    <div class="row">
-      <h3 class="title">Languages</h3>
-      <jg-icons-list :items="languages" />
-    </div>
+    <footer class="site-footer">
+      <span class="footer-note"
+        >Not a frontend engineer by trade — this site was hand-built and polished with a little AI
+        help.</span
+      >
+    </footer>
   </div>
-  <footer class="site-footer">
-    <span class="footer-note">Not a frontend engineer by trade — this site was hand-built and polished with a little AI help.</span>
-  </footer>
 </template>
 
 <style scoped>

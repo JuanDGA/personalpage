@@ -9,11 +9,7 @@
 
 <template>
   <router-link v-if="to !== 'none'" :to="to" custom v-slot="{ isActive, navigate }">
-    <button
-      class="link"
-      :class="{ 'link--active': isActive }"
-      @click="navigate"
-    >
+    <button class="link" :class="{ 'link--active': isActive }" @click="navigate">
       <slot />
     </button>
   </router-link>
