@@ -1,122 +1,221 @@
 <template>
-  <div class="container">
-    <div>
-      I am a very enthusiastic person who likes to explore ideas, which is why I have developed and
-      participated in various projects. Here you can find the list:
-    </div>
-    <div class="projects-lst">
-      <ol>
-        <li>
-          QuycaFa Newspaper:
-          <a target="_blank" href="https://periodicoquycafa.netlify.app/">QuycaFa</a> (Developed
-          during school)
-        </li>
-        <li>
-          Geoenvironmental profile:
-          <a target="_blank" href="https://geodatos.jguevara.dev/">Geodatos Facatativá</a>
-          (Developed during school)
-        </li>
-        <li>
-          Ecommunity: <a target="_blank" href="https://ecommunity.jguevara.dev/">Ecommunity</a> (WEB
-          3 Project)
-        </li>
-        <li class="neo">
-          Scheduler:
-          <a target="_blank" href="https://scheduler.neoventix.com/">NeoScheduler</a> (Continuous
-          development)
-        </li>
-        <li class="neo">
-          Neoventix: <a target="_blank" href="https://neoventix.com/">Neoventix</a> (Under
-          development)
-        </li>
-      </ol>
-    </div>
-    <div class="neo">
-      In addition, I'm currently working on
-      <a target="_blank" href="https://neoventix.com/">Neoventix.</a>
-      Which is an AI project aimed at improving the usability and the functionalities of the tools
-      that I'm developing, such as
-      <a target="_blank" href="https://scheduler.neoventix.com/">NeoScheduler,</a> a product of
-      <a target="_blank" href="https://neoventix.com/">Neoventix.</a>
-    </div>
-    <div>
-      <h1 class="center">Preview projects</h1>
-    </div>
-    <div>
-      <h2>Mars Lander:</h2>
-      <p class="codingame">
-        I recently took on the Mars Lander challenge on the
-        <a href="https://www.codingame.com/training/expert/mars-lander-episode-3" target="_blank"
-          >Codingame</a
-        >
-        platform. I originally wrote my solution in Kotlin, but I've also adapted it to JavaScript.
-        Check it out:
-        <router-link to="/preview/mars-lander">
-          <template #default>
-            <span class="mars">Mars Lander</span>
-          </template>
-        </router-link>
+  <div class="page">
+    <section class="card">
+      <div class="card__header">
+        <h2 class="card__title">SinfonIA Uniandes - RoboCup At Home 2024</h2>
+        <span class="card__badge">1st Place</span>
+      </div>
+      <p class="card__desc">
+        Technical Leader of the social robotics student initiative. Led the team to a first-place
+        finish at the international RoboCup at Home 2024 competition.
       </p>
-    </div>
+      <div class="card__tags">
+        <span class="tag">Social Robotics</span>
+        <span class="tag">Leadership</span>
+        <span class="tag">RoboCup</span>
+      </div>
+      <div class="card__links">
+        <span class="link-placeholder">Repo link coming soon</span>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2 class="card__title">Pepper Chess Vision</h2>
+      <p class="card__desc">
+        A real-time computer vision system for the Pepper robot. Uses two YOLO models (one for the
+        board, one for pieces) trained on a custom synthetic dataset created in Blender mixed with
+        public data. The system passes the interpreted board state to Stockfish and the robot speaks
+        the selected move aloud.
+      </p>
+      <div class="card__tags">
+        <span class="tag">Computer Vision</span>
+        <span class="tag">YOLO</span>
+        <span class="tag">Blender</span>
+        <span class="tag">Python</span>
+        <span class="tag">Pepper Robot</span>
+      </div>
+      <div class="card__links">
+        <span class="link-placeholder">Repo link coming soon</span>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2 class="card__title">Unitree G1 "Aura" - Robotica Uniandes</h2>
+      <p class="card__desc">
+        Core software engineering contributor developing features and control systems for the
+        Unitree G1 humanoid robot platform, internally named "Aura."
+      </p>
+      <div class="card__tags">
+        <span class="tag">Humanoid Robotics</span>
+        <span class="tag">C++</span>
+        <span class="tag">Embedded</span>
+        <span class="tag">Unitree</span>
+      </div>
+      <div class="card__links">
+        <span class="link-placeholder">Repo link coming soon</span>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2 class="card__title">Graduation Project - Rust Robotics Middleware</h2>
+      <p class="card__desc">
+        A Rust library and communication architecture designed to connect robots with external
+        processing units. Cross-platform support tested on ARM, AMD32, AMD64, and ESP32. A paper is
+        in progress for journal submission.
+      </p>
+      <div class="card__tags">
+        <span class="tag">Rust</span>
+        <span class="tag">Embedded</span>
+        <span class="tag">ARM</span>
+        <span class="tag">ESP32</span>
+        <span class="tag">Robotics Middleware</span>
+      </div>
+      <div class="card__links">
+        <span class="link-placeholder">Repo link coming soon</span>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2 class="card__title">Genetic Algorithm Cryptography</h2>
+      <p class="card__desc">
+        A professional-grade cryptography solution leveraging genetic algorithms. Combines
+        evolutionary optimization with cryptographic primitives. A paper is in progress for journal
+        submission.
+      </p>
+      <div class="card__tags">
+        <span class="tag">Genetic Algorithms</span>
+        <span class="tag">Cryptography</span>
+        <span class="tag">AI</span>
+        <span class="tag">Research</span>
+      </div>
+      <div class="card__links">
+        <span class="link-placeholder">Repo link coming soon</span>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2 class="card__title">Mars Lander - Genetic Algorithm Demo</h2>
+      <p class="card__desc">
+        Interactive genetic algorithm simulation originally from the CodinGame platform. Visualizes
+        population evolution in real time to solve the Mars Lander landing challenge. Built as a
+        learning exercise in evolutionary computation.
+      </p>
+      <div class="card__tags">
+        <span class="tag">Genetic Algorithms</span>
+        <span class="tag">JavaScript</span>
+        <span class="tag">Simulation</span>
+        <span class="tag">Optimization</span>
+      </div>
+      <div class="card__links">
+        <router-link to="/preview/mars-lander" class="card__link">Try the demo &rarr;</router-link>
+      </div>
+    </section>
   </div>
 </template>
 
 <style scoped>
-  .center {
-    text-align: center;
-  }
-
-  .container {
-    max-width: 90vw;
-    width: 750px;
-    margin: 20px auto;
-    font-size: 1.3em;
-  }
-
-  .codingame a {
-    -webkit-background-clip: text !important;
-    -webkit-text-fill-color: transparent !important;
-    background-clip: text !important;
-    background: linear-gradient(90deg, #f2bb13, #f7b003);
-  }
-
-  .codingame .mars {
-    -webkit-background-clip: text !important;
-    -webkit-text-fill-color: transparent !important;
-    background-clip: text !important;
-    background: linear-gradient(90deg, #e74c3c, #f5b041);
-  }
-
-  .container .projects-lst {
-    margin: 30px 0;
+  .page {
+    max-width: var(--max-width);
+    width: 90vw;
+    margin: var(--space-lg) auto;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    gap: var(--space-lg);
   }
 
-  li::marker {
-    color: #58d68d;
-    font-weight: bold;
+  .card {
+    background: var(--color-bg-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    transition: all var(--transition-default);
   }
 
-  li {
-    width: 100%;
+  .card:hover {
+    border-color: var(--color-border-hover);
+    box-shadow: var(--shadow-hover);
   }
 
-  .neo a {
-    -webkit-background-clip: text !important;
-    -webkit-text-fill-color: transparent !important;
-    background-clip: text !important;
-    background: linear-gradient(90deg, #8ad5e8, #16bbe5, #0077c9);
+  .card__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-sm);
   }
 
-  a {
+  .card__title {
+    font-family: var(--font-mono);
+    font-size: 1.1rem;
+    color: var(--color-text);
+    font-weight: 500;
+    margin-bottom: var(--space-sm);
+  }
+
+  .card__badge {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--color-bg);
+    background: var(--color-accent);
+    border-radius: var(--radius-full);
+    padding: 2px 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .card__desc {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-md);
+  }
+
+  .card__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+    margin-bottom: var(--space-md);
+  }
+
+  .tag {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-accent);
+    background: var(--color-accent-glow);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-full);
+    padding: 2px 10px;
+    transition: all var(--transition-default);
+  }
+
+  .tag:hover {
+    border-color: var(--color-accent);
+    background: var(--color-accent-glow);
+  }
+
+  .card__links {
+    display: flex;
+    gap: var(--space-sm);
+  }
+
+  .card__link {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--color-accent);
     text-decoration: none;
-    color: #58d68d;
-    font-weight: bold;
-    transition: 300ms;
+    transition: color var(--transition-fast);
   }
 
-  a:hover {
-    font-size: 1.1em;
+  .card__link:hover {
+    color: var(--color-text);
+  }
+
+  .link-placeholder {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--color-text-dim);
+    font-style: italic;
   }
 </style>

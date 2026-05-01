@@ -1,12 +1,11 @@
 <script setup>
-  import kotlin from "@/assets/icons/kotlin.png";
   import python from "@/assets/icons/python.png";
-  import java from "@/assets/icons/java.png";
-  import js from "@/assets/icons/js.png";
-  import vue from "@/assets/icons/vue.png";
-  import react from "@/assets/icons/react.png";
-  import angular from "@/assets/icons/angular.png";
-  import spring from "@/assets/icons/spring.png";
+  import yolo from "@/assets/icons/yolo.svg";
+  import pytorch from "@/assets/icons/pytorch.svg";
+  import kaggle from "@/assets/icons/kaggle.svg";
+  import ros from "@/assets/icons/ros.svg";
+  import rust from "@/assets/icons/rust.svg";
+  import cplusplus from "@/assets/icons/cplusplus.svg";
   import english from "@/assets/icons/english.png";
   import spanish from "@/assets/icons/spanish.png";
   import german from "@/assets/icons/german.png";
@@ -15,7 +14,64 @@
   import leadership from "@/assets/icons/leadership.png";
   import JgIconsList from "@/components/JgIconsList.vue";
 
-  const generalSkills = [
+  const coreExpertise = [
+    "Computer Vision",
+    "Robotics",
+    "Embedded Systems",
+    "Genetic Algorithms",
+    "Software Architecture",
+  ];
+
+  const programmingLanguages = [
+    {
+      name: "Rust",
+      img: rust,
+      level: "Advanced",
+      bg: "#DEA584",
+    },
+    { name: "C++", img: cplusplus, level: "Advanced", bg: "#00599C" },
+    {
+      name: "Python",
+      img: python,
+      level: "Advanced",
+      bg: "linear-gradient(90deg, #63C8CD, #EF9F35)",
+    },
+  ];
+
+  const frameworks = [
+    {
+      name: "YOLO",
+      img: yolo,
+      level: "Advanced",
+      bg: "linear-gradient(90deg, #00FFFF, #00BFFF)",
+    },
+    {
+      name: "PyTorch",
+      img: pytorch,
+      level: "Advanced",
+      bg: "#EE4C2C",
+    },
+    {
+      name: "Kaggle",
+      img: kaggle,
+      level: "Intermediate",
+      bg: "linear-gradient(90deg, #20BEFF, #0077B5)",
+    },
+    {
+      name: "ROS",
+      img: ros,
+      level: "Advanced",
+      bg: "linear-gradient(90deg, #22314E, #E34F26)",
+    },
+  ];
+
+  const humanLanguages = [
+    { name: "English", img: english, bg: "linear-gradient(90deg, #C9082A, #F2F2F2)" },
+    { name: "German", img: german, bg: "linear-gradient(90deg, #DD0000, #FFCE00)" },
+    { name: "Spanish", img: spanish, bg: "linear-gradient(90deg, #FFCE00, #599ED3, #C9082A)" },
+  ];
+
+  const softSkills = [
     {
       name: "Teamwork",
       img: teamwork,
@@ -24,81 +80,50 @@
     { name: "Creativity", img: creativity, bg: "linear-gradient(90deg, #3498db, #2ecc71)" },
     { name: "Leadership", img: leadership, bg: "linear-gradient(90deg, #599ED3, #FFD33B)" },
   ];
-
-  const programmingLanguages = [
-    {
-      name: "Kotlin",
-      img: kotlin,
-      level: "Advanced",
-      bg: "linear-gradient(90deg, #0096D6, #816EE4, #C856BD, #F88A02, #F88A02)",
-    },
-    { name: "Java", img: java, level: "Advanced", bg: "linear-gradient(90deg, #72A0FA, #DB380E)" },
-    {
-      name: "Python",
-      img: python,
-      level: "Advanced",
-      bg: "linear-gradient(90deg, #63C8CD, #EF9F35)",
-    },
-    { name: "Javascript", img: js, level: "Expert", bg: "#FFDD51" },
-  ];
-
-  const frameworks = [
-    { name: "SpringBoot", img: spring, level: "Advanced", bg: "#6DC647" },
-    { name: "Vue", img: vue, level: "Expert", bg: "linear-gradient(90deg, #42D392, #5F8BEE)" },
-    { name: "React", img: react, level: "Intermediate", bg: "#60DAFA" },
-    {
-      name: "Angular",
-      img: angular,
-      level: "Intermediate",
-      bg: "linear-gradient(90deg, #DE002D, #C4002B)",
-    },
-  ];
-
-  const languages = [
-    {
-      name: "English",
-      img: english,
-      level: "Advanced",
-      bg: "linear-gradient(90deg, #C9082A, #F2F2F2)",
-    },
-    {
-      name: "German",
-      img: german,
-      level: "Novice",
-      bg: "linear-gradient(90deg, #DD0000, #FFCE00)",
-    },
-    {
-      name: "Spanish",
-      img: spanish,
-      level: "Primary language",
-      bg: "linear-gradient(90deg, #FFCE00, #599ED3, #C9082A)",
-    },
-  ];
 </script>
 
 <template>
-  <div>
-    <div class="container">
-      <div class="row">
-        <h3 class="title">General skills</h3>
-        <jg-icons-list :items="generalSkills" />
+  <div class="page">
+    <section class="card">
+      <h2 class="card__title">Core Expertise</h2>
+      <div class="card__body">
+        <div class="tags">
+          <span v-for="skill in coreExpertise" :key="skill" class="tag">{{ skill }}</span>
+        </div>
       </div>
-      <div class="row">
-        <h3 class="title">Programming languages</h3>
+    </section>
+
+    <section class="card">
+      <h2 class="card__title">Programming Languages</h2>
+      <div class="card__body">
         <jg-icons-list :items="programmingLanguages" />
       </div>
-      <div class="row">
-        <h3 class="title">Frameworks</h3>
+    </section>
+
+    <section class="card">
+      <h2 class="card__title">Frameworks & Tools</h2>
+      <div class="card__body">
         <jg-icons-list :items="frameworks" />
       </div>
-      <div class="row">
-        <h3 class="title">Languages</h3>
-        <jg-icons-list :items="languages" />
+    </section>
+
+    <section class="card">
+      <h2 class="card__title">Languages</h2>
+      <div class="card__body">
+        <jg-icons-list :items="humanLanguages" />
       </div>
-    </div>
+    </section>
+
+    <section class="card">
+      <h2 class="card__title">Soft Skills</h2>
+      <div class="card__body">
+        <jg-icons-list :items="softSkills" />
+      </div>
+    </section>
+
     <footer class="site-footer">
       <span class="footer-note"
-        >Not a frontend engineer by trade — this site was hand-built and polished with a little AI
+        >Not a frontend engineer by trade - this site was hand-built and polished with a little AI
         help.</span
       >
     </footer>
@@ -106,29 +131,70 @@
 </template>
 
 <style scoped>
-  .container {
-    width: 750px;
-    max-width: 90vw;
-    margin: 30px auto;
+  .page {
+    max-width: var(--max-width);
+    width: 90vw;
+    margin: var(--space-lg) auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
   }
 
-  .row {
-    width: 100%;
+  .card {
+    background: var(--color-bg-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    transition: border-color var(--transition-default);
+  }
+
+  .card:hover {
+    border-color: var(--color-border-hover);
+  }
+
+  .card__title {
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    color: var(--color-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: var(--space-md);
+    padding-bottom: var(--space-sm);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .card__body {
     display: flex;
     justify-content: center;
-    align-items: center;
-    flex-direction: column;
   }
 
-  .title {
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-sm);
+  }
+
+  .tag {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-full);
+    padding: var(--space-xs) var(--space-md);
+    transition: all var(--transition-default);
+  }
+
+  .tag:hover {
+    border-color: var(--color-accent);
     color: var(--color-accent);
-    font-size: 1.3rem;
+    background: var(--color-accent-glow);
   }
 
   .site-footer {
-    margin-top: var(--space-xl);
-    padding: var(--space-lg) var(--space-md);
     text-align: center;
+    padding: var(--space-lg) 0;
     border-top: 1px solid var(--color-border);
   }
 

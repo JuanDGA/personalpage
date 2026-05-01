@@ -253,7 +253,7 @@
         <div class="stat">
           <span class="stat__label">Best Score</span>
           <span class="stat__value">{{
-            betterChromosome === Infinity ? "—" : betterChromosome
+            betterChromosome === Infinity ? "-" : betterChromosome
           }}</span>
         </div>
         <div class="stat">
